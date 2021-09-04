@@ -16,12 +16,12 @@ namespace Simbir.Controllers
         [HttpGet]
         public IEnumerable<BookDto> GetAll()
         {
-            return Books.ListOfBooks;
+            return Books.BooksList;
         }
 
         [Route("[action]")]
         [HttpGet]
-        public IEnumerable<BookDto> GetByAuthor(string author)
+        public IEnumerable<BookDto> GetByAuthor([FromBody]HumanDto author)
         {
             return Books.AuthoredBy(author);
         }
@@ -31,7 +31,7 @@ namespace Simbir.Controllers
         public void PostAddBook([FromBody] BookDto book)
         {
             if (Books.FindBook(book) == null)
-                Books.ListOfBooks.Add(book);
+                Books.BooksList.Add(book);
         }
 
         [Route("[action]")]
@@ -39,7 +39,7 @@ namespace Simbir.Controllers
         public void DeleteBook([FromBody] BookDto book)
         {
             var findedBook = Books.FindBook(book);
-            Books.ListOfBooks.Remove(findedBook);
+            Books.BooksList.Remove(findedBook);
         }
     }
 }

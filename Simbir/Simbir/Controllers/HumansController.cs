@@ -17,14 +17,14 @@ namespace Simbir.Controllers
         [HttpGet]
         public IEnumerable<HumanDto> GetAll()
         {
-            return Humans.ListOfHumans;
+            return Humans.HumansList;
         }
 
         [Route("[action]")]
         [HttpGet]
         public IEnumerable<HumanDto> GetAuthors()
         {
-            return Humans.ListOfHumans.Where(human => Books.AreAuthor(human));
+            return Humans.HumansList.Where(human => Books.AreAuthor(human));
         }
 
         [Route("[action]")]
@@ -39,7 +39,7 @@ namespace Simbir.Controllers
         public void PostAddHuman([FromBody] HumanDto human)
         {
             if(Humans.FindHuman(human)==null)
-                Humans.ListOfHumans.Add(human);
+                Humans.HumansList.Add(human);
         }
 
         [Route("[action]")]
@@ -47,7 +47,7 @@ namespace Simbir.Controllers
         public void DeleteHuman([FromBody] HumanDto human)
         {
             var findedHuman = Humans.FindHuman(human);
-            Humans.ListOfHumans.Remove(findedHuman);
+            Humans.HumansList.Remove(findedHuman);
         }
     }
 }

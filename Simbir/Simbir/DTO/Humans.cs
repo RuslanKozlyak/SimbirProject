@@ -10,7 +10,7 @@ namespace Simbir.DTO
             new HumanDto { FullName = "Лев Николаевич Толстой", Birthday = "28.08.1828" },
             new HumanDto { FullName = "Иван Иванович Иванов", Birthday = "01.01.2001" }
         };
-        public static List<HumanDto> ListOfHumans
+        public static List<HumanDto> HumansList
         {
             get
             {
@@ -23,7 +23,7 @@ namespace Simbir.DTO
         }
         public static HumanDto GetContainingQuery(string query)
         {
-            foreach (var human in ListOfHumans)
+            foreach (var human in HumansList)
             {
                 if (human.FullName.Contains(query))
                     return human;
@@ -32,7 +32,7 @@ namespace Simbir.DTO
         }
         public static HumanDto FindHuman(HumanDto human)
         {
-            foreach (var element in ListOfHumans)
+            foreach (var element in HumansList)
             {
                 if (human.FullName == element.FullName & human.Birthday == element.Birthday)
                     return element;
