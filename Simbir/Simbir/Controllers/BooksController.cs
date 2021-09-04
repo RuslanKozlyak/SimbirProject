@@ -18,23 +18,28 @@ namespace Simbir.Controllers
         {
             return Books.ListOfBooks;
         }
+
         [Route("[action]")]
         [HttpGet]
         public IEnumerable<BookDto> GetByAuthor(string author)
         {
             return Books.AuthoredBy(author);
         }
+
         [Route("[action]")]
         [HttpPost]
         public void PostAddBook([FromBody] BookDto book)
         {
-            Books.ListOfBooks.Add(book);
+            if (Books.FindBook(book) == null)
+                Books.ListOfBooks.Add(book);
         }
+
         [Route("[action]")]
         [HttpDelete]
         public void DeleteBook([FromBody] BookDto book)
         {
-            Books.RemoveBook(book);
+            var findedBook = Books.FindBook(book);
+            Books.ListOfBooks.Remove(findedBook);
         }
     }
 }

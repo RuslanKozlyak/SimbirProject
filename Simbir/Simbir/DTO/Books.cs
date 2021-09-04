@@ -10,6 +10,7 @@ namespace Simbir.DTO
             new BookDto { Title = "Анна Каренина", Author = "Лев Николаевич Толстой", Genre = "Драма" },
             new BookDto { Title = "Обломов", Author = "Иван Александрович Гончаров", Genre = "Сатира" }
         };
+
         public static List<BookDto> ListOfBooks
         {
             get
@@ -31,18 +32,21 @@ namespace Simbir.DTO
             }
             return false;
         }
+
         public static IEnumerable<BookDto> AuthoredBy(string author)
         {
             return listOfBooks.Where(book => book.Author == author);
         }
-        public static void RemoveBook(BookDto book)
+        
+        public static BookDto FindBook(BookDto book)
         {
             foreach (var element in ListOfBooks)
             {
                 if (book.Author == element.Author & book.Title == element.Title & book.Genre == element.Genre)
-                    ListOfBooks.Remove(element);
+                    return element;
                 break;
             }
+            return null;
         }
     }
 }

@@ -19,29 +19,35 @@ namespace Simbir.Controllers
         {
             return Humans.ListOfHumans;
         }
+
         [Route("[action]")]
         [HttpGet]
         public IEnumerable<HumanDto> GetAuthors()
         {
             return Humans.ListOfHumans.Where(human => Books.AreAuthor(human));
         }
+
         [Route("[action]")]
         [HttpGet]
         public HumanDto GetQuery([FromQuery]string query)
         {
-            return Humans.ContainsQuery(query);
+            return Humans.GetContainingQuery(query);
         }
+
         [Route("[action]")]
         [HttpPost]
         public void PostAddHuman([FromBody] HumanDto human)
         {
-            Humans.ListOfHumans.Add(human);
+            if(Humans.FindHuman(human)==null)
+                Humans.ListOfHumans.Add(human);
         }
+
         [Route("[action]")]
         [HttpDelete]
         public void DeleteHuman([FromBody] HumanDto human)
         {
-            Humans.RemoveHuman(human);
+            var findedHuman = Humans.FindHuman(human);
+            Humans.ListOfHumans.Remove(findedHuman);
         }
     }
 }
