@@ -8,7 +8,11 @@ using Simbir.DTO;
 
 namespace Simbir.Controllers
 {
-
+    /// <summary>
+    /// Часть 2. п.3 Создание контроллера, отвечающего за человека
+    /// </summary>
+    /// <returns></returns>
+    
     [ApiController]
     [Route("[controller]")]
     public class HumansController : ControllerBase

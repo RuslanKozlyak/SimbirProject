@@ -4,6 +4,9 @@ namespace Simbir.DTO
 {
     public class Humans
     {
+        /// <summary>
+        /// Часть 2. п.2.3 Создание статичного списка людей
+        /// </summary>
         static List<HumanDto> listOfHumans = new List<HumanDto>
         {
             new HumanDto { FullName = "Александр Сергеевич Пушкин", Birthday = "06.06.1799" },

@@ -12,6 +12,11 @@ namespace Simbir.Controllers
     [ApiController]
     public class BooksController : ControllerBase
     {
+        /// <summary>
+        /// Часть 2. п.4 Создание контроллера, отвечающего за книгу
+        /// </summary>
+        /// <returns></returns>
+
         [Route("[action]")]
         [HttpGet]
         public IEnumerable<BookDto> GetAll()
@@ -40,6 +45,34 @@ namespace Simbir.Controllers
         {
             var findedBook = Books.FindBook(book);
             Books.BooksList.Remove(findedBook);
+        }
+
+
+        /// <summary>
+        /// Часть 2.2 п.2 Добавление возможности сделать
+        /// запрос с сортировкой по автору, жанру или имени книги
+        /// </summary>
+        /// <returns></returns>
+
+        [Route("[action]")]
+        [HttpGet]
+        public IEnumerable<BookDto> GetSortedByAuthor()
+        {
+            return Books.BooksList.OrderBy(book => book.Author.FullName);
+        }
+
+        [Route("[action]")]
+        [HttpGet]
+        public IEnumerable<BookDto> GetSortedByGenre()
+        {
+            return Books.BooksList.OrderBy(book => book.Genre);
+        }
+
+        [Route("[action]")]
+        [HttpGet]
+        public IEnumerable<BookDto> GetSortedByTitle()
+        {
+            return Books.BooksList.OrderBy(book => book.Title);
         }
     }
 }

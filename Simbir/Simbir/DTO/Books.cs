@@ -4,6 +4,9 @@ namespace Simbir.DTO
 {
     public class Books
     {
+        /// <summary>
+        /// Часть 2. п.2.3 Создание статичного списка книг
+        /// </summary>
         static List<BookDto> listOfBooks = new List<BookDto>
         {
             new BookDto { 
