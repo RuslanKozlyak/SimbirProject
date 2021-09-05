@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Simbir.DTO
 {
@@ -25,6 +26,16 @@ namespace Simbir.DTO
                 listOfHumans = value;
             }
         }
+        public static IEnumerable<HumanDto> GetAll()
+        {
+            return Humans.HumansList;
+        }
+
+        public static IEnumerable<HumanDto> GetAuthors()
+        {
+            return Humans.HumansList.Where(human => Books.AreAuthor(human));
+        }
+
         public static HumanDto GetContainingQuery(string query)
         {
             foreach (var human in HumansList)

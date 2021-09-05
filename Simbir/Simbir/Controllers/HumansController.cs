@@ -21,14 +21,14 @@ namespace Simbir.Controllers
         [HttpGet]
         public IEnumerable<HumanDto> GetAll()
         {
-            return Humans.HumansList;
+            return Humans.GetAll();
         }
 
         [Route("[action]")]
         [HttpGet]
         public IEnumerable<HumanDto> GetAuthors()
         {
-            return Humans.HumansList.Where(human => Books.AreAuthor(human));
+            return Humans.GetAuthors();
         }
 
         [Route("[action]")]

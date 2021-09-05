@@ -21,7 +21,7 @@ namespace Simbir.Controllers
         [HttpGet]
         public IEnumerable<BookDto> GetAll()
         {
-            return Books.BooksList;
+            return Books.GetAll();
         }
 
         [Route("[action]")]
@@ -58,21 +58,21 @@ namespace Simbir.Controllers
         [HttpGet]
         public IEnumerable<BookDto> GetSortedByAuthor()
         {
-            return Books.BooksList.OrderBy(book => book.Author);
+            return Books.GetSortedByAuthor();
         }
 
         [Route("[action]")]
         [HttpGet]
         public IEnumerable<BookDto> GetSortedByGenre()
         {
-            return Books.BooksList.OrderBy(book => book.Genre);
+            return Books.GetSortedByGenre();
         }
 
         [Route("[action]")]
         [HttpGet]
         public IEnumerable<BookDto> GetSortedByTitle()
         {
-            return Books.BooksList.OrderBy(book => book.Title);
+            return Books.GetSortedByTitle();
         }
     }
 }

@@ -33,6 +33,27 @@ namespace Simbir.DTO
                 listOfBooks = value;
             }
         }
+        public static IEnumerable<BookDto> GetAll()
+        {
+            return Books.BooksList;
+        }
+
+        public static IEnumerable<BookDto> GetSortedByAuthor()
+        {
+            return Books.BooksList.OrderBy(book => book.Author);
+        }
+
+        public static IEnumerable<BookDto> GetSortedByGenre()
+        {
+            return Books.BooksList.OrderBy(book => book.Genre);
+        }
+
+        public static IEnumerable<BookDto> GetSortedByTitle()
+        {
+            return Books.BooksList.OrderBy(book => book.Genre);
+        }
+
+        
 
         public static bool AreAuthor(HumanDto human)
         {
