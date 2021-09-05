@@ -13,6 +13,8 @@ namespace Simbir.DTO
         /// Часть 2.2 п.1 Добавление валицации, все поля NotNull
         /// </summary>
         [Required]
+        public int Id { get; set; }
+        [Required]
         public string FullName { get; set; }
         [Required]
         public string Birthday { get; set; }

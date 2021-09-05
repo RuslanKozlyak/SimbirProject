@@ -11,15 +11,15 @@ namespace Simbir.DTO
         {
             new BookDto { 
                 Title = "Евгений Онегин", 
-                Author = new HumanDto { FullName = "Александр Сергеевич Пушкин", Birthday = "06.06.1799" }, 
+                Author = 1, 
                 Genre = "Роман" },
             new BookDto { 
                 Title = "Анна Каренина", 
-                Author =  new HumanDto { FullName = "Лев Николаевич Толстой", Birthday = "28.08.1828" }, 
+                Author =  2, 
                 Genre = "Драма" },
             new BookDto { 
                 Title = "Обломов", 
-                Author = new HumanDto { FullName = "Иван Иванович Иванов", Birthday = "01.01.2001" }, 
+                Author = 3, 
                 Genre = "Сатира" }
         };
         public static List<BookDto> BooksList
@@ -38,7 +38,7 @@ namespace Simbir.DTO
         {
             foreach (var book in BooksList)
             {
-                if (book.Author.FullName == human.FullName)
+                if (book.Author == human.Id)
                     return true;
             }
             return false;
@@ -46,7 +46,7 @@ namespace Simbir.DTO
 
         public static IEnumerable<BookDto> AuthoredBy(HumanDto author)
         {
-            return listOfBooks.Where(book => book.Author.FullName == author.FullName);
+            return listOfBooks.Where(book => book.Author == author.Id);
         }
         
         public static BookDto FindBook(BookDto book)

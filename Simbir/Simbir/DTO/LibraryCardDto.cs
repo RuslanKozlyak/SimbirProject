@@ -13,7 +13,7 @@ namespace Simbir.DTO
         /// Часть 2.2 п.1 Добавление валицации, все поля NotNull
         /// </summary>
         [Required]
-        public HumanDto Human { get; set; }
+        public int HumanId { get; set; }
         [Required]
         public DateTimeOffset Date { get; set; }
     }

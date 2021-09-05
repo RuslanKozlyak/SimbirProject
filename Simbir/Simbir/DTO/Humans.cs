@@ -9,9 +9,10 @@ namespace Simbir.DTO
         /// </summary>
         static List<HumanDto> listOfHumans = new List<HumanDto>
         {
-            new HumanDto { FullName = "Александр Сергеевич Пушкин", Birthday = "06.06.1799" },
-            new HumanDto { FullName = "Лев Николаевич Толстой", Birthday = "28.08.1828" },
-            new HumanDto { FullName = "Иван Иванович Иванов", Birthday = "01.01.2001" }
+            new HumanDto {Id = 1, FullName = "Александр Сергеевич Пушкин", Birthday = "06.06.1799" },
+            new HumanDto {Id = 2, FullName = "Лев Николаевич Толстой", Birthday = "28.08.1828" },
+            new HumanDto {Id = 3, FullName = "Иван Алексеевич Гончаров", Birthday = "18.06.1812" },
+            new HumanDto {Id = 4, FullName = "Иван Иванович Иванов", Birthday = "01.01.2001" }
         };
         public static List<HumanDto> HumansList
         {

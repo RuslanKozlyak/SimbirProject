@@ -58,7 +58,7 @@ namespace Simbir.Controllers
         [HttpGet]
         public IEnumerable<BookDto> GetSortedByAuthor()
         {
-            return Books.BooksList.OrderBy(book => book.Author.FullName);
+            return Books.BooksList.OrderBy(book => book.Author);
         }
 
         [Route("[action]")]

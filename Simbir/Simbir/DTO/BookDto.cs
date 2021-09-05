@@ -17,7 +17,7 @@ namespace Simbir.DTO
         [Required]
         public string Title { get; set; }
         [Required]
-        public HumanDto Author { get; set; }
+        public int Author { get; set; }
         [Required]
         public string Genre { get; set; }
     }
