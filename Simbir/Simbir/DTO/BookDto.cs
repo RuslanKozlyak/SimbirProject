@@ -12,8 +12,8 @@ namespace Simbir.DTO
         /// Часть 2. п.2.2 Создание класса репрезентирующего книгу
         /// Часть 2.2 п.1 Добавление валицации, все поля NotNull
         /// </summary>
-        
-        
+        [Required]
+        public string Id { get; set; }
         [Required]
         public string Title { get; set; }
         [Required]

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Simbir.DTO
@@ -8,52 +9,71 @@ namespace Simbir.DTO
         /// <summary>
         /// Часть 2. п.2.3 Создание статичного списка людей
         /// </summary>
-        static List<HumanDto> listOfHumans = new List<HumanDto>
-        {
-            new HumanDto {Id = 1, FullName = "Александр Сергеевич Пушкин", Birthday = "06.06.1799" },
-            new HumanDto {Id = 2, FullName = "Лев Николаевич Толстой", Birthday = "28.08.1828" },
-            new HumanDto {Id = 3, FullName = "Иван Алексеевич Гончаров", Birthday = "18.06.1812" },
-            new HumanDto {Id = 4, FullName = "Иван Иванович Иванов", Birthday = "01.01.2001" }
-        };
-        public static List<HumanDto> HumansList
+        private static List<HumanDto> _listOfHumans = new List<HumanDto>();
+        public static List<HumanDto> HumanList
         {
             get
             {
-                return listOfHumans;
+                return _listOfHumans;
             }
             set
             {
-                listOfHumans = value;
+                _listOfHumans = value;
             }
         }
         public static IEnumerable<HumanDto> GetAll()
         {
-            return Humans.HumansList;
+            return Humans.HumanList;
         }
 
         public static IEnumerable<HumanDto> GetAuthors()
         {
-            return Humans.HumansList.Where(human => Books.AreAuthor(human));
+            return Humans.HumanList.Where(human => Books.AreAuthor(human));
         }
 
         public static HumanDto GetContainingQuery(string query)
         {
-            foreach (var human in HumansList)
-            {
-                if (human.FullName.Contains(query))
-                    return human;
-            }
-            return null;
+            return HumanList.FirstOrDefault(human => $"{human.FirstName}{human.LastName}{human.MiddleName}".Contains(query));
         }
         public static HumanDto FindHuman(HumanDto human)
         {
-            foreach (var element in HumansList)
+            return HumanList.FirstOrDefault(h => h.Id == human.Id);
+        }
+
+        public static string AddHuman(HumanDto human)
+        {
+            try
             {
-                if (human.FullName == element.FullName & human.Birthday == element.Birthday)
-                    return element;
-                break;
+                var findedHuman = FindHuman(human);
+                if (findedHuman == null)
+                {
+                    HumanList.Add(findedHuman);
+                    return "Человек успешно добавлен!";
+                }
+                else
+                {
+                    return "Такой человек уже существует!";
+                }
+
             }
-            return null;
+            catch (Exception ex)
+            {
+                return $"Человек не добавлен! Ошибка: [ {ex.Message} ]";
+            }
+        }
+
+        public static string DeleteHuman(HumanDto human)
+        {
+            try
+            {
+                var findedHuman = FindHuman(human);
+                HumanList.Remove(findedHuman);
+                return "Человек успешно удален!";
+            }
+            catch (Exception ex)
+            {
+                return $"Человек не удален! Ошибка: [ {ex.Message} ]";
+            }
         }
     }
 }

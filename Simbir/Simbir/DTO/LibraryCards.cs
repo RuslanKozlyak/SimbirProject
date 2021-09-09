@@ -10,16 +10,16 @@ namespace Simbir.DTO
         /// <summary>
         /// ЧАсть 2.1 Создание статичного списка библиотечных карточек
         /// </summary>
-        static List<LibraryCardDto> libraryCardsList = new List<LibraryCardDto>();
+        private static List<LibraryCardDto> _libraryCardList = new List<LibraryCardDto>();
         public static List<LibraryCardDto> LibraryCardsList
         {
             get 
             {
-                return libraryCardsList; 
+                return _libraryCardList; 
             }
             set 
             { 
-                libraryCardsList = value; 
+                _libraryCardList = value; 
             }
         }
     }

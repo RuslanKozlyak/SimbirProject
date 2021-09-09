@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 namespace Simbir.DTO
 {
@@ -7,57 +8,40 @@ namespace Simbir.DTO
         /// <summary>
         /// Часть 2. п.2.3 Создание статичного списка книг
         /// </summary>
-        static List<BookDto> listOfBooks = new List<BookDto>
-        {
-            new BookDto { 
-                Title = "Евгений Онегин", 
-                Author = 1, 
-                Genre = "Роман" },
-            new BookDto { 
-                Title = "Анна Каренина", 
-                Author =  2, 
-                Genre = "Драма" },
-            new BookDto { 
-                Title = "Обломов", 
-                Author = 3, 
-                Genre = "Сатира" }
-        };
-        public static List<BookDto> BooksList
+        private static List<BookDto> _listOfBooks = new List<BookDto>();
+        public static List<BookDto> BookList
         {
             get
             {
-                return listOfBooks;
+                return _listOfBooks;
             }
             set
             {
-                listOfBooks = value;
+                _listOfBooks = value;
             }
         }
         public static IEnumerable<BookDto> GetAll()
         {
-            return Books.BooksList;
+            return Books.BookList;
         }
 
-        public static IEnumerable<BookDto> GetSortedByAuthor()
+        public static IEnumerable<BookDto> GetSortedBy(string sortBy)
         {
-            return Books.BooksList.OrderBy(book => book.Author);
+            switch (sortBy)
+            {
+                case "Author":
+                    return Books.BookList.OrderBy(book => book.Author);
+                case "Title":
+                    return Books.BookList.OrderBy(book => book.Author);
+                case "Genre":
+                    return Books.BookList.OrderBy(book => book.Genre);
+            }
+            return null;
         }
-
-        public static IEnumerable<BookDto> GetSortedByGenre()
-        {
-            return Books.BooksList.OrderBy(book => book.Genre);
-        }
-
-        public static IEnumerable<BookDto> GetSortedByTitle()
-        {
-            return Books.BooksList.OrderBy(book => book.Genre);
-        }
-
-        
 
         public static bool AreAuthor(HumanDto human)
         {
-            foreach (var book in BooksList)
+            foreach (var book in BookList)
             {
                 if (book.Author == human.Id)
                     return true;
@@ -67,18 +51,48 @@ namespace Simbir.DTO
 
         public static IEnumerable<BookDto> AuthoredBy(HumanDto author)
         {
-            return listOfBooks.Where(book => book.Author == author.Id);
+            return _listOfBooks.Where(book => book.Author == author.Id);
         }
-        
+
         public static BookDto FindBook(BookDto book)
         {
-            foreach (var element in BooksList)
+            return BookList.FirstOrDefault(b => b.Id == book.Id);
+        }
+
+        public static string AddBook(BookDto book)
+        {
+            try
             {
-                if (book.Author == element.Author & book.Title == element.Title & book.Genre == element.Genre)
-                    return element;
-                break;
+                var findedBook = Books.FindBook(book);
+                if(findedBook == null)
+                {
+                    Books.BookList.Add(findedBook);
+                    return "Книга успешно добавлена!";
+                }
+                else
+                {
+                    return "Такая книга уже существует!";
+                }
+                    
             }
-            return null;
+            catch (Exception ex)
+            {
+                return $"Книга не добавлена! Ошибка: [ {ex.Message} ]";
+            }
+        }
+
+        public static string DeleteBook(BookDto book)
+        {
+            try
+            {
+                var findedBook = Books.FindBook(book);
+                Books.BookList.Remove(findedBook);
+                return "Книга успешно удалена!";
+            }
+            catch(Exception ex)
+            {
+                return $"Книга не удалена! Ошибка: [ {ex.Message} ]";
+            }
         }
     }
 }

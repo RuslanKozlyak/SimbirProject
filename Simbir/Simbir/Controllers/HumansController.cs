@@ -43,7 +43,7 @@ namespace Simbir.Controllers
         public void PostAddHuman([FromBody] HumanDto human)
         {
             if(Humans.FindHuman(human)==null)
-                Humans.HumansList.Add(human);
+                Humans.HumanList.Add(human);
         }
 
         [Route("[action]")]
@@ -51,7 +51,7 @@ namespace Simbir.Controllers
         public void DeleteHuman([FromBody] HumanDto human)
         {
             var findedHuman = Humans.FindHuman(human);
-            Humans.HumansList.Remove(findedHuman);
+            Humans.HumanList.Remove(findedHuman);
         }
     }
 }

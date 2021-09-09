@@ -33,18 +33,16 @@ namespace Simbir.Controllers
 
         [Route("[action]")]
         [HttpPost]
-        public void PostAddBook([FromBody] BookDto book)
+        public string PostAddBook([FromBody] BookDto book)
         {
-            if (Books.FindBook(book) == null)
-                Books.BooksList.Add(book);
+            return Books.AddBook(book);
         }
 
         [Route("[action]")]
         [HttpDelete]
-        public void DeleteBook([FromBody] BookDto book)
+        public string DeleteBook([FromBody] BookDto book)
         {
-            var findedBook = Books.FindBook(book);
-            Books.BooksList.Remove(findedBook);
+            return Books.DeleteBook(book);
         }
 
 
@@ -54,25 +52,11 @@ namespace Simbir.Controllers
         /// </summary>
         /// <returns></returns>
 
-        [Route("[action]")]
+        [Route("[action]/SortBy")]
         [HttpGet]
-        public IEnumerable<BookDto> GetSortedByAuthor()
+        public IEnumerable<BookDto> GetSortedBy(string sortBy)
         {
-            return Books.GetSortedByAuthor();
-        }
-
-        [Route("[action]")]
-        [HttpGet]
-        public IEnumerable<BookDto> GetSortedByGenre()
-        {
-            return Books.GetSortedByGenre();
-        }
-
-        [Route("[action]")]
-        [HttpGet]
-        public IEnumerable<BookDto> GetSortedByTitle()
-        {
-            return Books.GetSortedByTitle();
+            return Books.GetSortedBy(sortBy);
         }
     }
 }
