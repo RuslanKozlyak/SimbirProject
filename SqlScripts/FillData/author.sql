@@ -1,0 +1,10 @@
+insert into author (id, first_name, last_name, middle_name) values (1, 'Федор', 'Достоевский', 'Михайлович');
+insert into author (id, first_name, last_name, middle_name) values (2, 'Антон', 'Чехов', 'Павлович');
+insert into author (id, first_name, last_name, middle_name) values (3, 'Михаил', 'Булгаков', 'Афанасьевич');
+insert into author (id, first_name, last_name, middle_name) values (4, 'Эрих Мария', 'Ремарк', NULL);
+insert into author (id, first_name, last_name, middle_name) values (5, 'Александр', 'Пушкин', 'Сергеевич');
+insert into author (id, first_name, last_name, middle_name) values (6, 'Эрнест', 'Хемингуэй', NULL);
+insert into author (id, first_name, last_name, middle_name) values (7, 'Иван', 'Гончаров', 'Александрович');
+insert into author (id, first_name, last_name, middle_name) values (8, 'Марк', 'Твен', NULL);
+insert into author (id, first_name, last_name, middle_name) values (9, 'Николай', 'Гоголь', 'Васильевич');
+insert into author (id, first_name, last_name, middle_name) values (10, 'Иван', 'Тургенев', 'Сергеевич');

@@ -1,0 +1,15 @@
+insert into book (id, name, author_id) values (1, 'Капитанская дочка', 5);
+insert into book (id, name, author_id) values (2, 'Евгений Онегин', 5);
+insert into book (id, name, author_id) values (3, 'Преступление и наказание', 1);
+insert into book (id, name, author_id) values (4, 'Вишневый сад', 2);
+insert into book (id, name, author_id) values (5, 'Три сестры', 2);
+insert into book (id, name, author_id) values (6, 'Мастер и Маргарита', 3);
+insert into book (id, name, author_id) values (7, 'Бег', 3);
+insert into book (id, name, author_id) values (8, 'Три товарища', 4);
+insert into book (id, name, author_id) values (9, 'Старик и море', 6);
+insert into book (id, name, author_id) values (10, 'По ком звонит колокол', 6);
+insert into book (id, name, author_id) values (11, 'Обломов', 7);
+insert into book (id, name, author_id) values (12, 'Приключения Тома Сойера', 8);
+insert into book (id, name, author_id) values (13, 'Вечера на хуторе близь диканьки', 9);
+insert into book (id, name, author_id) values (14, 'Ночь перед рождеством', 9);
+insert into book (id, name, author_id) values (15, 'Отцы и дети', 10);

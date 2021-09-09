@@ -1,0 +1,10 @@
+insert into library_card (book_id, person_id) values (1, 3);
+insert into library_card (book_id, person_id) values (2, 3);
+insert into library_card (book_id, person_id) values (3, 3);
+insert into library_card (book_id, person_id) values (4, 1);
+insert into library_card (book_id, person_id) values (5, 1);
+insert into library_card (book_id, person_id) values (7, 3);
+insert into library_card (book_id, person_id) values (8, 4);
+insert into library_card (book_id, person_id) values (9, 8);
+insert into library_card (book_id, person_id) values (9, 4);
+insert into library_card (book_id, person_id) values (10, 8);
