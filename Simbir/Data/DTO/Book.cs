@@ -1,24 +1,25 @@
-﻿using System;
+﻿using Data;
+using Data.DTO;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Simbir.DTO
+namespace Data.DTO
 {
-    public class BookDto 
+    public class Book : BaseEntity
     {
         /// <summary>
         /// Часть 2. п.2.2 Создание класса репрезентирующего книгу
         /// Часть 2.2 п.1 Добавление валицации, все поля NotNull
         /// </summary>
-        [Required]
-        public string Id { get; set; }
+
         [Required]
         public string Title { get; set; }
         [Required]
-        public int Author { get; set; }
-        [Required]
-        public string Genre { get; set; }
+        public int AuthorId { get; set; }
+        [NotMapped]
+        public Author Author { get; set; }
+        [NotMapped]
+        public BookGenre BookGenre { get; set; }
     }
 }

@@ -27,7 +27,7 @@ namespace Simbir.Middleware
             string elapsedTime = "";
             try
             {
-                Stopwatch stopWatch = new Stopwatch();
+                Stopwatch stopWatch = new();
                 stopWatch.Start();
                 await _next(httpContext);
                 stopWatch.Stop();

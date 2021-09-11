@@ -6,18 +6,21 @@ using System.Threading.Tasks;
 
 namespace Simbir.DTO
 {
-    public class Book 
+    public class BookDto 
     {
         /// <summary>
         /// Часть 2. п.2.2 Создание класса репрезентирующего книгу
         /// Часть 2.2 п.1 Добавление валицации, все поля NotNull
         /// </summary>
-        
+        [Required]
+        public string Id { get; set; }
         [Required]
         public string Title { get; set; }
         [Required]
         public int Author { get; set; }
         [Required]
         public string Genre { get; set; }
+
+        public static List<BookDto> BookList { get; set; }
     }
 }
