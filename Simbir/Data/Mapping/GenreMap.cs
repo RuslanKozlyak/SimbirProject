@@ -14,9 +14,8 @@ namespace Data.Mapping
         {
             entityBuilder.HasKey(genre => genre.Id);
             entityBuilder.Property(genre => genre.GenreName).IsRequired();
-            entityBuilder.HasOne(bookGenre => bookGenre.BookGenre)
-                .WithMany(genre => genre.Genres)
-                .HasForeignKey(bookGenre => bookGenre.Id);
+            entityBuilder.Property(genre => genre.AddedDate);
+            entityBuilder.Property(genre => genre.ModifiedDate);
         }
     }
 }

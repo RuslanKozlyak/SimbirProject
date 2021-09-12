@@ -8,11 +8,12 @@ using System.Threading.Tasks;
 
 namespace Data.DTO
 {
+    [Table("genre")]
     public class Genre : BaseEntity
     {
+        [Column("genre_name")]
         public string GenreName { get; set; }
-        [NotMapped]
-        public virtual BookGenre BookGenre { get; set; }
 
+        public ICollection<BookGenre>BookGenre { get; set; }
     }
 }

@@ -12,8 +12,19 @@ namespace Data.Mapping
     {
         public LibraryCardMap(EntityTypeBuilder<LibraryCard> entityBuilder)
         {
+            entityBuilder.HasKey(lc => lc.Id);
             entityBuilder.Property(lc => lc.HumanId).IsRequired();
             entityBuilder.Property(lc => lc.BookId).IsRequired();
+            entityBuilder.Property(lc => lc.Date).IsRequired();
+            entityBuilder.Property(lc => lc.AddedDate);
+            entityBuilder.Property(lc => lc.ModifiedDate);
+
+            entityBuilder.HasOne(human => human.Human)
+                .WithMany(lc => lc.LibraryCard)
+                .HasForeignKey(human => human.HumanId);
+            entityBuilder.HasOne(book => book.Book)
+               .WithMany(lc => lc.LibraryCard)
+               .HasForeignKey(book => book.BookId);
         }
     }
 }

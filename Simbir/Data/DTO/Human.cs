@@ -2,27 +2,28 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Data.DTO
 {
+    [Table("person")]
     public class Human : BaseEntity
     {
         /// <summary>
         /// Часть 2. п.2.1 Создание класса репрезентирующего человека
         /// Часть 2.2 п.1 Добавление валицации, все поля NotNull
         /// </summary>
-
-        [Required]
+        [Column("first_name")]
         public string FirstName { get; set; }
-        [Required]
+        [Column("last_name")]
         public string LastName { get; set; }
-        [Required]
+        [Column("middle_name")]
         public string MiddleName { get; set; }
-        [Required]
+        [Column("birth_date")]
         public string Birthday { get; set; }
-        public int LibraryCardId { get; set; }
-        public LibraryCard LibraryCard { get; set; }
+
+        public ICollection<LibraryCard> LibraryCard { get; set; }
     }
 }

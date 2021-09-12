@@ -8,13 +8,15 @@ using System.Threading.Tasks;
 
 namespace Data.DTO 
 {
-    public class BookGenre
+    [Table("book_genre")]
+    public class BookGenre:BaseEntity
     {
+        [Column("book_id")]
         public int BookId { get; set; }
-        [NotMapped]
-        public ICollection<Book> Books { get; set; }
+        [Column("genre_id")]
         public int GenreId { get; set; }
-        [NotMapped]
-        public  ICollection<Genre> Genres { get; set; }
+
+        public Book Book { get; set; }
+        public  Genre Genre { get; set; }
     }
 }

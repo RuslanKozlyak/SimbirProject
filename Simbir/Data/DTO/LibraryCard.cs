@@ -2,24 +2,27 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Data.DTO
 {
-    public class LibraryCard 
+    [Table("library_card")]
+    public class LibraryCard : BaseEntity
     {
         /// <summary>
         /// Часть 2.1 п.1 Создание агрегатора репрезентирующего карточку в библиотеке
         /// Часть 2.2 п.1 Добавление валицации, все поля NotNull
         /// </summary>
-        [Required]
+        [Column("person_id")]
         public int HumanId { get; set; }
-        public Human Human { get; set; }
-        [Required]
+        [Column("book_id")]
         public int BookId { get; set; }
-        public Book Book { get; set; }
-        [Required]
+        [Column("pickup_date")]
         public DateTimeOffset Date { get; set; }
+
+        public Human Human { get; set; }
+        public Book Book { get; set; }
     }
 }

@@ -34,7 +34,7 @@ namespace Simbir
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DataContext>
-                (options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                (options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("Simbir")));
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddTransient<IBookService, BookService>();
 

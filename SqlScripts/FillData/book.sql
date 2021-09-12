@@ -1,3 +1,4 @@
+
 insert into book (id, name, author_id) values (1, 'Капитанская дочка', 5);
 insert into book (id, name, author_id) values (2, 'Евгений Онегин', 5);
 insert into book (id, name, author_id) values (3, 'Преступление и наказание', 1);

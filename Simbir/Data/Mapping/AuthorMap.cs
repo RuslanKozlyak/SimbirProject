@@ -16,6 +16,8 @@ namespace Data.Mapping
             entityBuilder.Property(author => author.FirstName).IsRequired();
             entityBuilder.Property(author => author.LastName).IsRequired();
             entityBuilder.Property(author => author.MiddleName);
+            entityBuilder.Property(author => author.AddedDate);
+            entityBuilder.Property(author => author.ModifiedDate);
         }
     }
 }

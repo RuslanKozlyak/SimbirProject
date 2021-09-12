@@ -1,3 +1,4 @@
+
 insert into person (id, birth_date, first_name, last_name, middle_name) values (1, '1912-3-4', 'Михаил', 'Медведев', 'Тимурович');
 insert into person (id, birth_date, first_name, last_name, middle_name) values (2, '1971-11-01', 'Иван', 'Карасев', 'Даниилович');
 insert into person (id, birth_date, first_name, last_name, middle_name) values (3, '1937-03-30', 'Руслан', 'Мельников', 'Янович');

@@ -17,9 +17,8 @@ namespace Data.Mapping
             entityBuilder.Property(human => human.LastName).IsRequired();
             entityBuilder.Property(human => human.MiddleName);
             entityBuilder.Property(human => human.Birthday);
-            entityBuilder.HasOne(lc => lc.LibraryCard)
-                .WithOne(human => human.Human)
-                .HasForeignKey<Human>(human => human.Id);
+            entityBuilder.Property(human => human.AddedDate);
+            entityBuilder.Property(human => human.ModifiedDate);
         }
     }
 }

@@ -35,8 +35,8 @@ namespace Service
                     return _bookRepository.GetAll().OrderBy(book => book.Author);
                 case "TITLE":
                     return _bookRepository.GetAll().OrderBy(book => book.Title);
-                case "GENRE":
-                    return _bookRepository.GetAll().OrderBy(book => book.BookGenre);
+                //case "GENRE":
+                //    return _bookRepository.GetAll().OrderBy(book => book.BookGenre);
             }
             return null;
         }

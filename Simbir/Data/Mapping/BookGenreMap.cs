@@ -12,10 +12,18 @@ namespace Data.Mapping
     {
         public BookGenreMap(EntityTypeBuilder<BookGenre> entityBuilder)
         {
-            entityBuilder.HasNoKey();
+            entityBuilder.HasKey(bookGenre => bookGenre.Id);
             entityBuilder.Property(bookGenre => bookGenre.BookId).IsRequired();
             entityBuilder.Property(bookGenre => bookGenre.GenreId).IsRequired();
-            
+            entityBuilder.Property(bookGenre => bookGenre.AddedDate);
+            entityBuilder.Property(bookGenre => bookGenre.ModifiedDate);
+
+            entityBuilder.HasOne(book => book.Book)
+                .WithMany(bookGenre => bookGenre.BookGenre)
+                .HasForeignKey(book => book.BookId);
+            entityBuilder.HasOne(genre => genre.Genre)
+                .WithMany(bookGenre => bookGenre.BookGenre)
+                .HasForeignKey(book => book.GenreId);
         }
     }
 }
