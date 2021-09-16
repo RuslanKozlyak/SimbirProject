@@ -11,11 +11,11 @@ namespace Simbir.Controllers
     [ApiController]
     public class LibraryCardsController : ControllerBase
     {
-        [Route("[action]")]
-        [HttpPost]
-        public void PostAddLibraryCard([FromBody] LibraryCardDto libraryCard)
-        {
-            LibraryCards.LibraryCardsList.Add(libraryCard);
-        }
+        //[Route("[action]")]
+        //[HttpPost]
+        ////public void PostAddLibraryCard([FromBody] LibraryCardDto libraryCard)
+        ////{
+        ////    LibraryCards.LibraryCardsList.Add(libraryCard);
+        ////}
     }
 }

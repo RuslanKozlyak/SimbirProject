@@ -20,6 +20,7 @@ namespace Data.DTO
         [Column("middle_name")]
         public string MiddleName { get; set; }
 
+        [NotMapped]
         public ICollection<Book> Books { get; set; }
     }
 }

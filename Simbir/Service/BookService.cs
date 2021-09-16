@@ -22,9 +22,14 @@ namespace Service
             return _bookRepository.GetAll();
         }
 
+        public IEnumerable<Book> GetAuthorBooks(int authorId)
+        {
+            return _bookRepository.GetAll().Where(book => book.AuthorId == authorId);
+        }
+
         public Book GetBook(int bookId)
         {
-            return _bookRepository.GetAll().FirstOrDefault(findedBook => findedBook.Id == bookId);
+            return _bookRepository.Get(bookId);
         }
 
         public IEnumerable<Book> GetSortedBy(string sortBy)
@@ -35,16 +40,11 @@ namespace Service
                     return _bookRepository.GetAll().OrderBy(book => book.Author);
                 case "TITLE":
                     return _bookRepository.GetAll().OrderBy(book => book.Title);
-                //case "GENRE":
-                //    return _bookRepository.GetAll().OrderBy(book => book.BookGenre);
+                case "GENRE":
+                    return _bookRepository.GetAll().OrderBy(book => book.BookGenre);
             }
             return null;
         }
-
-        //public IEnumerable<Book> AuthoredBy(Human author)
-        //{
-        //    return _bookRepository.GetAll().Where(book => book.Author == author);
-        //}
 
         public void AddBook(Book book)
         {
@@ -54,6 +54,11 @@ namespace Service
         public void DeleteBook(Book book)
         {
             _bookRepository.Remove(book);
+        }
+
+        public void UpdateBook(Book book)
+        {
+            _bookRepository.Update(book);
         }
     }
 }

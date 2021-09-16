@@ -1,18 +1,18 @@
 ﻿using Data;
+using Microsoft.EntityFrameworkCore;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+
 
 namespace Repository
 {
     public class Repository<T> : IRepository<T> where T : BaseEntity
     {
         private readonly DataContext _context;
+
         private DbSet<T> _entities;
-        string errorMessage = string.Empty;
         public Repository(DataContext context)
         {
             this._context = context;
@@ -25,7 +25,12 @@ namespace Repository
 
         public T Get(int id)
         {
-            return _entities.FirstOrDefault(s => s.Id == id);
+            var findedEntity = _entities.FirstOrDefault(s => s.Id == id);
+            if (findedEntity == null)
+            {
+                throw new ArgumentNullException("id");
+            }
+            return findedEntity;
         }
 
         public void Insert(T entity)
@@ -34,8 +39,25 @@ namespace Repository
             {
                 throw new ArgumentNullException("entity");
             }
-            _entities.Add(entity);
-            _context.SaveChanges();
+            if (AlreadyExist(entity.Id) == false)
+            {
+                entity.AddedDate = DateTimeOffset.UtcNow;
+                entity.ModifiedDate = DateTimeOffset.UtcNow;
+                _entities.Add(entity);
+                try
+                {
+                    _context.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+            else
+            {
+                //Какую ошибку лучше использовать, если будет попытка добавить дубликат?
+                throw new Exception("entity");
+            }
         }
 
         public void Update(T entity)
@@ -44,30 +66,54 @@ namespace Repository
             {
                 throw new ArgumentNullException("entity");
             }
-            _context.SaveChanges();
+            if (AlreadyExist(entity.Id) == true)
+            {
+                entity.ModifiedDate = DateTimeOffset.UtcNow;
+                _context.SaveChanges();
+            }
+            else
+            {
+                throw new Exception("entity");
+            }
         }
 
-        public void Delete(T entity)
-        {
-            if (entity == null)
-            {
-                throw new ArgumentNullException("entity");
-            }
-            _entities.Remove(entity);
-            _context.SaveChanges();
-        }
         public void Remove(T entity)
         {
             if (entity == null)
             {
                 throw new ArgumentNullException("entity");
             }
-            _entities.Remove(entity);
+            if (Get(entity.Id) == null)
+            {
+                _entities.Remove(entity);
+                _context.SaveChanges();
+            }
+            else
+            {
+                throw new Exception("entity");
+            }
         }
 
         public void SaveChanges()
         {
-            _context.SaveChanges();
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch
+            {
+                throw new Exception();
+            }
+
+        }
+        public bool AlreadyExist(int id)
+        {
+            var findedEntity = _entities.FirstOrDefault(s => s.Id == id);
+            if (findedEntity == null)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

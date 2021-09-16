@@ -18,8 +18,11 @@ namespace Data.DTO
         [Column("author_id")]
         public int AuthorId { get; set; }
 
+        [NotMapped]
         public Author Author { get; set; }
+        [NotMapped]
         public ICollection<BookGenre> BookGenre { get; set; }
+        [NotMapped]
         public ICollection<LibraryCard> LibraryCard { get; set; }
     }
 }

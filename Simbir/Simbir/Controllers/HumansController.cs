@@ -1,10 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Data.DTO;
 using Microsoft.AspNetCore.Mvc;
-using System;
+using Service.Interfaces;
+using Simbir.DTO;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Simbir.DTO;
 
 namespace Simbir.Controllers
 {
@@ -12,46 +11,155 @@ namespace Simbir.Controllers
     /// Часть 2. п.3 Создание контроллера, отвечающего за человека
     /// </summary>
     /// <returns></returns>
-    
+
     [ApiController]
     [Route("[controller]")]
     public class HumansController : ControllerBase
     {
-        [Route("[action]")]
-        [HttpGet]
-        public IEnumerable<HumanDto> GetAll()
+        private readonly IHumanService _humanService;
+        private readonly IBookService _bookService;
+        private readonly IBookGenreService _bookGenreService;
+        private readonly IGenreService _genreService;
+        private readonly ILibraryCardService _libraryCardService;
+        private readonly IAuthorService _authorService;
+
+        public HumansController(IHumanService humanService, IBookGenreService bookGenreService,
+            IGenreService genreService, ILibraryCardService libraryCardService, IBookService bookService, IAuthorService authorService)
         {
-            return Humans.GetAll();
+            _humanService = humanService;
+            _bookService = bookService;
+            _bookGenreService = bookGenreService;
+            _genreService = genreService;
+            _libraryCardService = libraryCardService;
+            _authorService = authorService;
         }
 
         [Route("[action]")]
         [HttpGet]
-        public IEnumerable<HumanDto> GetAuthors()
+        public IActionResult GetAll()
         {
-            return Humans.GetAuthors();
+            try
+            {
+                var model = new List<HumanDto>();
+                _humanService.GetAllHumans().ToList().ForEach(human =>
+                {
+                    HumanDto humanDto = (HumanDto)human;
+                    model.Add(humanDto);
+                });
+                return Ok(model);
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         [Route("[action]")]
         [HttpGet]
-        public HumanDto GetQuery([FromQuery]string query)
+        public IActionResult GetAuthors()
         {
-            return Humans.GetContainingQuery(query);
+            try
+            {
+                var model = new List<AuthorDto>();
+                _authorService.GetAllAuthors().ToList().ForEach(author =>
+                {
+                    AuthorDto authorDto = (AuthorDto)author;
+                    model.Add(authorDto);
+                });
+                return Ok(model);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
+        [Route("[action]")]
+        [HttpGet]
+        public IActionResult GetQuery([FromQuery] string query)
+        {
+            var model = new List<HumanDto>();
+            _humanService.GetHumanByQuery(query).ToList().ForEach(human =>
+            {
+                HumanDto humanDto = (HumanDto)human;
+                model.Add(humanDto);
+            });
+            return Ok(model);
         }
 
         [Route("[action]")]
         [HttpPost]
-        public void PostAddHuman([FromBody] HumanDto human)
+        public IActionResult PostPickupBook([FromBody] HumanDto humanDto)
         {
-            if(Humans.FindHuman(human)==null)
-                Humans.HumanList.Add(human);
+            try
+            {
+                var model = new List<LibraryCardDto>();
+                Human human = (Human)humanDto;
+                humanDto.Books.ForEach(bookDto =>
+                {
+                    Book book = (Book)bookDto;
+                    var addedCard = _libraryCardService.AddBookToPerson(human, book);
+                    LibraryCardDto cardDto = (LibraryCardDto)addedCard;
+                    model.Add(cardDto);
+                });
+                return Ok(model);
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         [Route("[action]")]
         [HttpDelete]
-        public void DeleteHuman([FromBody] HumanDto human)
+        public IActionResult DeleteBookFromPerson([FromBody] HumanDto humanDto)
         {
-            var findedHuman = Humans.FindHuman(human);
-            Humans.HumanList.Remove(findedHuman);
+            try
+            {
+                Human human = (Human)humanDto;
+                humanDto.Books.ForEach(bookDto =>
+                {
+                    Book book = (Book)bookDto;
+                    _libraryCardService.DeleteBookFromPerson(human, book);
+                });
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
+        [Route("[action]")]
+        [HttpPost]
+        public IActionResult PostAddHuman([FromBody] HumanDto humanDto)
+        {
+            Human human = (Human)humanDto;
+            return Ok(_humanService.AddHuman(human));
+        }
+
+        [Route("[action]")]
+        [HttpDelete]
+        public IActionResult DeleteHuman([FromBody] HumanDto humanDto)
+        {
+            Human human = (Human)humanDto;
+            return Ok(_humanService.DeleteHuman(human));
+        }
+
+        [Route("[action]")]
+        [HttpPost]
+        public IActionResult UpdateHuman([FromBody] HumanDto humanDto)
+        {
+            Human human = (Human)humanDto;
+            return Ok(_humanService.UpdateHuman(human));
+        }
+
+        [Route("[action]")]
+        [HttpDelete]
+        public IActionResult DeleteHumanByName([FromQuery] string fullName)
+        {
+            _humanService.DeleteHumanByName(fullName);
+            return Ok();
         }
     }
 }

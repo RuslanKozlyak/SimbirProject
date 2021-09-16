@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Data.DTO;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -18,9 +19,55 @@ namespace Simbir.DTO
         public string FirstName { get; set; }
         [Required]
         public string LastName { get; set; }
-        [Required]
         public string MiddleName { get; set; }
-        [Required]
-        public string Birthday { get; set; }
+        public string? Birthday { get; set; }
+
+        public List<BookDto> Books { get; set; }
+
+        public static explicit operator Human(HumanDto dto)
+        {
+            return new Human
+            {
+                Id = dto.Id,
+                FirstName = dto.FirstName,
+                LastName = dto.LastName,
+                MiddleName = dto.MiddleName,
+                Birthday = dto.Birthday
+            };
+        }
+
+        public static implicit operator HumanDto(Human human)
+        {
+            return new HumanDto
+            {
+                Id = human.Id,
+                FirstName = human.FirstName,
+                LastName = human.LastName,
+                MiddleName = human.MiddleName,
+                Birthday = human.Birthday
+            };
+        }
+
+        public static explicit operator Author(HumanDto dto)
+        {
+            return new Author
+            {
+                Id = dto.Id,
+                FirstName = dto.FirstName,
+                LastName = dto.LastName,
+                MiddleName = dto.MiddleName,
+            };
+        }
+
+        public static implicit operator HumanDto(Author human)
+        {
+            return new Author
+            {
+                Id = human.Id,
+                FirstName = human.FirstName,
+                LastName = human.LastName,
+                MiddleName = human.MiddleName,
+            };
+        }
     }
 }

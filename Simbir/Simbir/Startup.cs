@@ -35,8 +35,15 @@ namespace Simbir
         {
             services.AddDbContext<DataContext>
                 (options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("Simbir")));
+
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+
             services.AddTransient<IBookService, BookService>();
+            services.AddTransient<IHumanService, HumanService>();
+            services.AddTransient<IGenreService, GenreService>();
+            services.AddTransient<IAuthorService, AuthorService>();
+            services.AddTransient<IBookGenreService, BookGenreService>();
+            services.AddTransient<ILibraryCardService, LibraryCardService>();
 
             services.AddControllers();
 

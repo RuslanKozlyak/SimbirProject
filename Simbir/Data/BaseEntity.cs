@@ -12,8 +12,8 @@ namespace Data
         [Column("id")]
         public int Id { get; set; }
         [Column("added_date")]
-        public DateTime? AddedDate { get; set; }
+        public DateTimeOffset? AddedDate { get; set; }
         [Column("modified_date")]
-        public DateTime? ModifiedDate { get; set; }
+        public DateTimeOffset? ModifiedDate { get; set; }
     }
 }

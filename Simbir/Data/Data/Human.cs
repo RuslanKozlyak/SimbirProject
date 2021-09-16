@@ -24,6 +24,7 @@ namespace Data.DTO
         [Column("birth_date")]
         public string Birthday { get; set; }
 
+        [NotMapped]
         public ICollection<LibraryCard> LibraryCard { get; set; }
     }
 }

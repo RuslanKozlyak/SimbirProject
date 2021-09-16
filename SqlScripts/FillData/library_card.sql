@@ -1,6 +1,6 @@
-SET IDENTITY_INSERT book_genre off;
-SET IDENTITY_INSERT library_card on;
-insert into library_card (id,book_id, person_id,pickup_date) values (1,1, 3,'2021-07-18 00:40:12');
+use LibraryTest;
+set IDENTITY_INSERT library_card on;
+insert into library_card (id,book_id, person_id,pickup_date) values (1,1, 3,'2012-01-01');
 insert into library_card (id,book_id, person_id,pickup_date) values (2,2, 3,'07/23/2021');
 insert into library_card (id,book_id, person_id,pickup_date) values (3,3, 3,'07/29/2021');
 insert into library_card (id,book_id, person_id,pickup_date) values (4,4, 1,'07/24/2021');

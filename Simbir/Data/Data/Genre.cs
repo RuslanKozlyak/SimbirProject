@@ -14,6 +14,7 @@ namespace Data.DTO
         [Column("genre_name")]
         public string GenreName { get; set; }
 
+        [NotMapped]
         public ICollection<BookGenre>BookGenre { get; set; }
     }
 }
