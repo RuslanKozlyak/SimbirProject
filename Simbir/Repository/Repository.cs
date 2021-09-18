@@ -45,7 +45,6 @@ namespace Repository
             }
             entity.AddedDate = DateTimeOffset.UtcNow;
             entity.ModifiedDate = DateTimeOffset.UtcNow;
-            entity.Version = 1;
             _entities.Add(entity);
             try
             {
@@ -64,7 +63,6 @@ namespace Repository
                 throw new ArgumentNullException("entity");
             }
             entity.ModifiedDate = DateTimeOffset.UtcNow;
-            entity.Version++;
             _context.SaveChanges();
         }
 

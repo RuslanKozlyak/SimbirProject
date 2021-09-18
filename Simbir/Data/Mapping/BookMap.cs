@@ -21,7 +21,7 @@ namespace Data.Mapping
             entityBuilder.Property(book => book.YearOfWriting);
             entityBuilder.Property(book => book.AddedDate);
             entityBuilder.Property(book => book.ModifiedDate);
-            entityBuilder.Property(book => book.Version);
+            entityBuilder.Property(book => book.Version).IsRowVersion();
 
             entityBuilder.HasOne(book => book.Author)
                 .WithMany(author => author.Books)

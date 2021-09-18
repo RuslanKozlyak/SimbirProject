@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
@@ -17,6 +18,7 @@ namespace Data
         [Column("modified_date")]
         public DateTimeOffset? ModifiedDate { get; set; }
         [Column("version")]
-        public int? Version { get; set; }
+        [Timestamp]
+        public byte[] Version { get; set; }
     }
 }

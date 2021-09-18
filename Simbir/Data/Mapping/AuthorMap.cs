@@ -21,7 +21,7 @@ namespace Data.Mapping
             entityBuilder.Property(author => author.MiddleName);
             entityBuilder.Property(author => author.AddedDate);
             entityBuilder.Property(author => author.ModifiedDate);
-            entityBuilder.Property(author => author.Version);
+            entityBuilder.Property(author => author.Version).IsRowVersion();
         }
     }
 }

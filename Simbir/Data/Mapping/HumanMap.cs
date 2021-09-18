@@ -22,7 +22,7 @@ namespace Data.Mapping
             entityBuilder.Property(human => human.Birthday);
             entityBuilder.Property(human => human.AddedDate);
             entityBuilder.Property(human => human.ModifiedDate);
-            entityBuilder.Property(human => human.Version);
+            entityBuilder.Property(human => human.Version).IsRowVersion();
         }
     }
 }
