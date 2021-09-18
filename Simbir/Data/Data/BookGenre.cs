@@ -19,9 +19,7 @@ namespace Data.DTO
         [Column("genre_id")]
         public int GenreId { get; set; }
 
-        [NotMapped]
         public Book Book { get; set; }
-        [NotMapped]
         public  Genre Genre { get; set; }
     }
 }

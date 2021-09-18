@@ -20,11 +20,8 @@ namespace Data.DTO
         [Column("year_of_writing")]
         public DateTime? YearOfWriting { get; set; }
 
-        [NotMapped]
         public Author Author { get; set; }
-        [NotMapped]
         public ICollection<BookGenre> BookGenre { get; set; }
-        [NotMapped]
         public ICollection<LibraryCard> LibraryCard { get; set; }
     }
 }

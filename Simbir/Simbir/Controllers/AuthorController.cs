@@ -96,6 +96,61 @@ namespace Simbir.Controllers
         }
 
         /// <summary>
+        /// Создать новый контроллер, метод  которого будет выводить список всех авторов,
+        /// у которых есть хотя бы одна книга, написанная в определенный год(этот год прокидывать
+        /// в query параметрах контроллера). Отсортировать список авторов по алфавиту.
+        /// Предусмотреть возможность сортировки по возрастанию и по убыванию
+        /// (этот параметр также передавать через параметры контроллера)
+        /// </summary>
+        [Route("[action]")]
+        [HttpGet]
+        public IActionResult GetBookByYear([FromQuery] DateTime yearOfWriting, [FromQuery] bool alphabetSort)
+        {
+            try
+            {
+                var model = new List<AuthorDto>();
+                _bookService.GetAllBooks().Where(book => book.YearOfWriting == yearOfWriting).ToList().ForEach(findedBook =>
+                {
+                    var author = _authorService.GetAuthor(findedBook.AuthorId);
+                    model.Add(author);
+                });
+                model.OrderBy(author => author.FirstName);
+                if (alphabetSort)
+                    return Ok(model);
+                else
+                {
+                    model.Reverse();
+                    return Ok(model);
+                }
+                    
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Route("[action]")]
+        [HttpGet]
+        public IActionResult GetBookByQuery([FromQuery] string query)
+        {
+            try
+            {
+                var model = new List<AuthorDto>();
+                _bookService.GetAllBooks().Where(book => book.Title.ToUpper().Contains(query.ToUpper())).ToList().ForEach(findedBook =>
+                {
+                    var author = _authorService.GetAuthor(findedBook.AuthorId);
+                    model.Add(author);
+                });
+                return Ok(model);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
         /// Часть 2 п 7.3.3 Добавить автора (с книгами или без) ответ - автор + книги
         /// </summary>
         [Route("[action]")]
@@ -119,7 +174,7 @@ namespace Simbir.Controllers
                                  _bookGenreService.AddGenreBook(book, (Genre)genre);
                              });
                          });
-                return Ok();
+                return Ok("Автор добавлен!");
             }
             catch (Exception ex)
             {
@@ -142,7 +197,7 @@ namespace Simbir.Controllers
                 if (books == null)
                 {
                     _authorService.DeleteAuthor(author);
-                    return Ok();
+                    return Ok("Автор удален!");
                 }
                 else
                 {

@@ -24,14 +24,7 @@ namespace Repository
 
         public IEnumerable<T> GetAll()
         {
-            var all = _entities.AsEnumerable();
-            all.ToList().ForEach(entety =>
-            {
-                entety.Version = 1;
-            }
-            );
-            _context.SaveChanges();
-            return all;
+            return _entities.AsEnumerable();
         }
 
         public T Get(int id)
@@ -70,7 +63,7 @@ namespace Repository
             {
                 throw new ArgumentNullException("entity");
             }
-                entity.ModifiedDate = DateTimeOffset.UtcNow;
+            entity.ModifiedDate = DateTimeOffset.UtcNow;
             entity.Version++;
             _context.SaveChanges();
         }

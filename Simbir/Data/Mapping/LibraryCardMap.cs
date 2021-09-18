@@ -15,13 +15,13 @@ namespace Data.Mapping
         /// </summary>
         public LibraryCardMap(EntityTypeBuilder<LibraryCard> entityBuilder)
         {
-            entityBuilder.HasKey(lc => lc.Id);
+            //entityBuilder.HasKey(lc => lc.Id);
             entityBuilder.Property(lc => lc.HumanId).IsRequired();
             entityBuilder.Property(lc => lc.BookId).IsRequired();
             entityBuilder.Property(lc => lc.Date).IsRequired();
-            entityBuilder.Property(lc => lc.AddedDate);
-            entityBuilder.Property(lc => lc.ModifiedDate);
-            entityBuilder.Property(lc => lc.Version);
+            //entityBuilder.Property(lc => lc.AddedDate);
+            //entityBuilder.Property(lc => lc.ModifiedDate);
+            //entityBuilder.Property(lc => lc.Version);
 
             entityBuilder.HasOne(human => human.Human)
                 .WithMany(lc => lc.LibraryCard)

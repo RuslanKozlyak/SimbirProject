@@ -1,4 +1,4 @@
-SELECT person.id AS personID, book.*
+SELECT person.id, book.*
 FROM person 
 JOIN library_card AS lc 
 ON lc.person_id = 1

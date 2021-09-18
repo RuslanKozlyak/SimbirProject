@@ -21,9 +21,7 @@ namespace Data.DTO
         [Column("pickup_date")]
         public DateTime Date { get; set; }
 
-        [NotMapped]
         public Human Human { get; set; }
-        [NotMapped]
         public Book Book { get; set; }
     }
 }

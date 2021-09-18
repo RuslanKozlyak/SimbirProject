@@ -147,7 +147,7 @@ namespace Simbir.Controllers
                     var genre = _genreService.GetGenre(genreDto.Id);
                     _bookGenreService.AddGenreBook(book, genre);
                 });
-                return Ok();
+                return Ok("К книге добавлен жанр!");
             }
             catch (Exception ex)
             {
@@ -167,7 +167,7 @@ namespace Simbir.Controllers
                     var genre = _genreService.GetGenre(genreDto.Id);
                     _bookGenreService.DeleteBookGenre(book, genre);
                 });
-                return Ok();
+                return Ok("У книги удален жанр!");
             }
             catch (Exception ex)
             {
@@ -196,7 +196,7 @@ namespace Simbir.Controllers
                         _genreService.AddGenre((Genre)genre);
                     _bookGenreService.AddGenreBook(book, (Genre)genre);
                 });
-                return Ok();
+                return Ok("Книга добавлена!");
             }
             catch(Exception ex)
             {
@@ -225,7 +225,7 @@ namespace Simbir.Controllers
                         _bookGenreService.DeleteBookGenre(book, (Genre)genre);
                     });
                     _bookService.DeleteBook(book);
-                    return Ok();
+                    return Ok("Книга удалена!");
                 }
                 else
                 {

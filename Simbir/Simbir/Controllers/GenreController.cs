@@ -64,7 +64,7 @@ namespace Simbir.Controllers
             {
                 var genre = (Genre)genreDto;
                 _genreService.AddGenre(genre);
-                return Ok();
+                return Ok("Жанр добавлен!");
             }
             catch (Exception ex)
             {
