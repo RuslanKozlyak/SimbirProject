@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Service.Interfaces;
 using Simbir.DTO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -48,9 +49,9 @@ namespace Simbir.Controllers
                 });
                 return Ok(model);
             }
-            catch
+            catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
         }
 
@@ -68,9 +69,9 @@ namespace Simbir.Controllers
                 });
                 return Ok(model);
             }
-            catch
+            catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
         }
 
@@ -88,13 +89,49 @@ namespace Simbir.Controllers
                 });
                 return Ok(model);
             }
-            catch
+            catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
-           
         }
 
+        /// <summary>
+        /// Часть 2 п 7.1.5 Получить список всех взятых пользователем книг (GET)
+        /// в качестве параметра поиска - ID пользователя. Полное дерево:
+        /// Книги - автор - жанр
+        /// </summary>
+        [Route("[action]")]
+        [HttpGet]
+        public IActionResult GetHumanBooks([FromQuery] int humanId)
+        {
+            try
+            {
+                var model = new List<BookDto>();
+                _libraryCardService.GetHumanBooks(humanId).ToList().ForEach(humanBook =>
+                {
+                        var book= _bookService.GetBook(humanBook.BookId);
+                        var author = _authorService.GetAuthor(book.AuthorId);
+                        BookDto bookDto = (Book)book;
+                        bookDto.Author = author;
+                        _bookGenreService.GetBookGenre(book.Id).ToList().ForEach(bookGenre =>
+                        {
+                            var genre = _genreService.GetGenre(bookGenre.GenreId);
+                            bookDto.Genres.Add(genre);
+                        });
+                        model.Add(bookDto);
+                });
+                return Ok(model);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Часть 2 п 7.1.6 Пользователь может взять книгу
+        /// (добавить в список книг пользователя книгу)  Пользователь + книги
+        /// </summary>
         [Route("[action]")]
         [HttpPost]
         public IActionResult PostPickupBook([FromBody] HumanDto humanDto)
@@ -112,12 +149,16 @@ namespace Simbir.Controllers
                 });
                 return Ok(model);
             }
-            catch
+            catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
         }
 
+        /// <summary>
+        /// Часть 2 п 7.1.7 Пользователь может вернуть книгу
+        /// (добавить в список книг пользователя книгу)  Пользователь + книги
+        /// </summary>
         [Route("[action]")]
         [HttpDelete]
         public IActionResult DeleteBookFromPerson([FromBody] HumanDto humanDto)
@@ -132,11 +173,15 @@ namespace Simbir.Controllers
                 });
                 return Ok();
             }
-            catch
+            catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
         }
+
+        /// <summary>
+        /// Часть 2 п 7.1.1 Пользователь может быть добавлен. (POST) (вернуть пользователя)
+        /// </summary>
 
         [Route("[action]")]
         [HttpPost]
@@ -147,31 +192,18 @@ namespace Simbir.Controllers
                 Human human = (Human)humanDto;
                 return Ok(_humanService.AddHuman(human));
             }
-            catch
+            catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
-            
         }
 
-        [Route("[action]")]
-        [HttpDelete]
-        public IActionResult DeleteHuman([FromBody] HumanDto humanDto)
-        {
-            try
-            {
-                Human human = (Human)humanDto;
-                return Ok(_humanService.DeleteHuman(human));
-            }
-            catch
-            {
-                return BadRequest();
-            }
-            
-        }
+        /// <summary>
+        /// Часть 2 п 7.1.2 Информация о пользователе может быть изменена (PUT) (вернуть пользователя)
+        /// </summary>
 
         [Route("[action]")]
-        [HttpPost]
+        [HttpPut]
         public IActionResult UpdateHuman([FromBody] HumanDto humanDto)
         {
             try
@@ -179,12 +211,42 @@ namespace Simbir.Controllers
                 Human human = (Human)humanDto;
                 return Ok(_humanService.UpdateHuman(human));
             }
-            catch
+            catch (Exception ex)
             {
-               return BadRequest();
+                return BadRequest(ex.Message);
             }
-            
         }
+
+        /// <summary>
+        /// Часть 2 п 7.1.3 Пользователь может быть удалён по ID (DELETE) (ок или ошибку, если такого id нет)
+        /// </summary>
+
+        [Route("[action]")]
+        [HttpDelete]
+        public IActionResult DeleteHuman([FromBody] HumanDto humanDto)
+        {
+            try
+            {
+                if (_humanService.GetHuman(humanDto.Id) != null)
+                {
+                    Human human = (Human)humanDto;
+                    return Ok(_humanService.DeleteHuman(human));
+                }
+                else
+                {
+                    return BadRequest("Такого Id нет!");
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Часть 2 п 7.1.4 Пользователь или пользователи могут быть удалены по ФИО (не заботясь о том что могут быть полные тёзки. Без пощады.) (DELETE) Ok - или ошибку, если что-то пошло не так. 
+        /// </summary>
+
 
         [Route("[action]")]
         [HttpDelete]
@@ -195,11 +257,10 @@ namespace Simbir.Controllers
                 _humanService.DeleteHumanByName(fullName);
                 return Ok();
             }
-            catch
+            catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
-            
         }
     }
 }

@@ -8,19 +8,18 @@ using System.Threading.Tasks;
 
 namespace Data.DTO
 {
+    /// <summary>
+    /// Часть 2 п 2 Подготовить в приложении сущности согласно созданной ранее базе данных. 
+    /// </summary>
     [Table("library_card")]
     public class LibraryCard : BaseEntity
     {
-        /// <summary>
-        /// Часть 2.1 п.1 Создание агрегатора репрезентирующего карточку в библиотеке
-        /// Часть 2.2 п.1 Добавление валицации, все поля NotNull
-        /// </summary>
         [Column("person_id")]
         public int HumanId { get; set; }
         [Column("book_id")]
         public int BookId { get; set; }
         [Column("pickup_date")]
-        public DateTimeOffset Date { get; set; }
+        public DateTime Date { get; set; }
 
         [NotMapped]
         public Human Human { get; set; }

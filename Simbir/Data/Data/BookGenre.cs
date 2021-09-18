@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace Data.DTO 
 {
+    /// <summary>
+    /// Часть 2 п 2 Подготовить в приложении сущности согласно созданной ранее базе данных. 
+    /// </summary>
     [Table("book_genre")]
     public class BookGenre:BaseEntity
     {

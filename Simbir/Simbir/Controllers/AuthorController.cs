@@ -29,29 +29,45 @@ namespace Simbir.Controllers
             _libraryCardService = libraryCardService;
             _authorService = authorService;
         }
+
+        /// <summary>
+        /// Часть 2 п 7.3.1 Можно получить список всех авторов.
+        /// (без книг, как и везде, где не указано обратное)
+        /// </summary>
         [Route("[action]")]
         [HttpGet]
         public IActionResult GetAll()
         {
-            var model = new List<AuthorDto>();
-            _authorService.GetAllAuthors().ToList().ForEach(author =>
+            try
             {
-                AuthorDto authorDto = author;
-                _bookService.GetAuthorBooks(author.Id).ToList().ForEach(book =>
+                var model = new List<AuthorDto>();
+                _authorService.GetAllAuthors().ToList().ForEach(author =>
                 {
-                    _bookGenreService.GetBookGenre(book.Id).ToList().ForEach(bookGenre =>
+                    AuthorDto authorDto = author;
+                    _bookService.GetAuthorBooks(author.Id).ToList().ForEach(book =>
                     {
-                        BookDto bookDto = (Book)book;
-                        var genre = _genreService.GetGenre(bookGenre.GenreId);
-                        bookDto.Genres.Add(genre);
-                        authorDto.Books.Add(bookDto);
+                        _bookGenreService.GetBookGenre(book.Id).ToList().ForEach(bookGenre =>
+                        {
+                            BookDto bookDto = (Book)book;
+                            var genre = _genreService.GetGenre(bookGenre.GenreId);
+                            bookDto.Genres.Add(genre);
+                            authorDto.Books.Add(bookDto);
+                        });
                     });
+                    model.Add(authorDto);
                 });
-                model.Add(authorDto);
-            });
-            return Ok(model);
+                return Ok(model);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
+        /// <summary>
+        /// Часть 2 п 7.3.2 Можно получить список книг автора (книг может и не быть).
+        /// автор + книги + жанры
+        /// </summary>
         [Route("[action]")]
         [HttpGet]
         public IActionResult GetAuthorBooks([FromQuery] int authorId)
@@ -73,12 +89,15 @@ namespace Simbir.Controllers
                 });
                 return Ok(model);
             }
-            catch
+            catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
         }
 
+        /// <summary>
+        /// Часть 2 п 7.3.3 Добавить автора (с книгами или без) ответ - автор + книги
+        /// </summary>
         [Route("[action]")]
         [HttpPost]
         public IActionResult PostAddAuthor([FromBody] AuthorDto authorDto)
@@ -108,20 +127,31 @@ namespace Simbir.Controllers
             }
         }
 
+        /// <summary>
+        /// Часть 2 п 7.3.4 Удалить автора (если только нет книг, 
+        /// иначе кидать ошибку с пояснением, что нельзя удалить автора пока есть его книги) - Ок или Ошибка.
+        /// </summary>
         [Route("[action]")]
         [HttpPost]
         public IActionResult PostDeleteAuthor([FromBody] AuthorDto authorDto)
         {
-            var author = (Author)authorDto;
-            var books = _bookService.GetAuthorBooks(authorDto.Id);
-            if(books == null)
+            try
             {
-                _authorService.DeleteAuthor(author);
-                return Ok();
+                var author = (Author)authorDto;
+                var books = _bookService.GetAuthorBooks(authorDto.Id);
+                if (books == null)
+                {
+                    _authorService.DeleteAuthor(author);
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest("Вы не можете удалить автора не удалив его книги.");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest("Вы не можете удалить автора не удалив его книги.");
+                return BadRequest(ex.Message);
             }
         }
     }

@@ -8,6 +8,9 @@ using System.Linq;
 
 namespace Repository
 {
+    /// <summary>
+    /// Часть 2 п 6 Реализовать репозитории под все сущности кроме референсных
+    /// </summary>
     public class Repository<T> : IRepository<T> where T : BaseEntity
     {
         private readonly DataContext _context;
@@ -42,6 +45,7 @@ namespace Repository
             }
             entity.AddedDate = DateTimeOffset.UtcNow;
             entity.ModifiedDate = DateTimeOffset.UtcNow;
+            //entity.Version = 1;
             _entities.Add(entity);
             try
             {
@@ -60,7 +64,8 @@ namespace Repository
                 throw new ArgumentNullException("entity");
             }
                 entity.ModifiedDate = DateTimeOffset.UtcNow;
-                _context.SaveChanges();
+            //entity.Version++;
+            _context.SaveChanges();
         }
 
         public void Remove(T entity)

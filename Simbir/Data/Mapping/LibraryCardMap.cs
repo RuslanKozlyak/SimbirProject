@@ -10,6 +10,9 @@ namespace Data.Mapping
 {
     public class LibraryCardMap
     {
+        /// <summary>
+        ///Реализовать все связи между таблицами, которые присутствуют в схеме.
+        /// </summary>
         public LibraryCardMap(EntityTypeBuilder<LibraryCard> entityBuilder)
         {
             entityBuilder.HasKey(lc => lc.Id);
@@ -18,6 +21,7 @@ namespace Data.Mapping
             entityBuilder.Property(lc => lc.Date).IsRequired();
             entityBuilder.Property(lc => lc.AddedDate);
             entityBuilder.Property(lc => lc.ModifiedDate);
+            //entityBuilder.Property(lc => lc.Version);
 
             entityBuilder.HasOne(human => human.Human)
                 .WithMany(lc => lc.LibraryCard)

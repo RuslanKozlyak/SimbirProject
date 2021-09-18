@@ -33,8 +33,12 @@ namespace Simbir
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            /// <summary>
+            /// Часть 2 п 1 Подключить при помощи ef базу данных к проекту
+            /// </summary>
             services.AddDbContext<DataContext>
-                (options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("Simbir")));
+                (options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
+                b => b.MigrationsAssembly("Simbir")));
 
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 

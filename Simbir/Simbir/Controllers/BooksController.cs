@@ -31,16 +31,11 @@ namespace Simbir.Controllers
             _libraryCardService = libraryCardService;
             _authorService = authorService;
         }
-        /// <summary>
-        /// Часть 2. п.4 Создание контроллера, отвечающего за книгу
-        /// </summary>
-        /// <returns></returns>
 
         [Route("[action]")]
         [HttpGet]
         public IActionResult GetAll()
         {
-            //Не возвращается список жанров, видимо из за ограничений вложенности JSON
             try
             {
                 var model = new List<BookDto>();
@@ -58,62 +53,51 @@ namespace Simbir.Controllers
                 });
                 return Ok(model);
             }
-            catch
+            catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
         }
 
-        //[Route("[action]")]
-        //[HttpGet]
-        //public IActionResult GetByAuthor([FromQuery] int authorId)
-        //{
-        //    try
-        //    {
-        //        var model = new List<BookDto>();
-        //        _bookService.GetAuthorBooks(authorId).ToList().ForEach(book =>
-        //        {
-        //            var author = _authorService.GetAuthor(book.AuthorId);
-        //            BookDto bookDto = (Book)book;
-        //            bookDto.Author = author;
-        //            _bookGenreService.GetBookGenre(book.Id).ToList().ForEach(bookGenre =>
-        //            {
-        //                var genre = _genreService.GetGenre(bookGenre.GenreId);
-        //                bookDto.Genres.Add(genre);
-        //            });
-        //            model.Add(bookDto);
-        //        });
-        //        return Ok(model);
-        //    }
-        //    catch
-        //    {
-        //        return BadRequest();
-        //    }
-        //}
-
+        /// <summary>
+        /// Часть 2 п 7.2.4 Можно получить список всех книг с фильтром по автору 
+        /// (По любой комбинации трёх полей сущности автор. Имеется 
+        /// ввиду условие equals + and )
+        /// </summary>
         [Route("[action]")]
         [HttpGet]
         public IActionResult GetByAuthorQuery([FromQuery] string query)
         {
-            var model = new List<BookDto>();
-            _authorService.GetAuthorByQuery(query).ToList().ForEach(author =>
+            try
             {
-                _bookService.GetAuthorBooks(author.Id).ToList().ForEach(book =>
+                var model = new List<BookDto>();
+                _authorService.GetAuthorByQuery(query).ToList().ForEach(author =>
                 {
-                    var author = _authorService.GetAuthor(book.AuthorId);
-                    BookDto bookDto = (Book)book;
-                    bookDto.Author = author;
-                    _bookGenreService.GetBookGenre(book.Id).ToList().ForEach(bookGenre =>
+                    _bookService.GetAuthorBooks(author.Id).ToList().ForEach(book =>
                     {
-                        var genre = _genreService.GetGenre(bookGenre.GenreId);
-                        bookDto.Genres.Add(genre);
+                        var author = _authorService.GetAuthor(book.AuthorId);
+                        BookDto bookDto = (Book)book;
+                        bookDto.Author = author;
+                        _bookGenreService.GetBookGenre(book.Id).ToList().ForEach(bookGenre =>
+                        {
+                            var genre = _genreService.GetGenre(bookGenre.GenreId);
+                            bookDto.Genres.Add(genre);
+                        });
+                        model.Add(bookDto);
                     });
-                    model.Add(bookDto);
                 });
-            });
-            return Ok(model);
+                return Ok(model);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
+        /// <summary>
+        /// Часть 2 п 7.2.5 Можно получить список книг по жанру.
+        /// Книга + жанр + автор
+        /// </summary>
         [Route("[action]")]
         [HttpGet]
         public IActionResult GetByGenreQuery([FromQuery] string genreName)
@@ -137,18 +121,24 @@ namespace Simbir.Controllers
                 });
                 return Ok(model);
             }
-            catch
+            catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
-
         }
 
+        /// <summary>
+        /// Часть 2 п 7.2.3 Книге можно присвоить новый жанр, или удалить один
+        /// из имеющихся (PUT с телом.На вход сущность Book или её Dto)
+        /// При добавлении или удалении вы должны просто либо добавлять
+        /// запись, либо удалять из списка жанров. 
+        /// Каскадно удалять все жанры и книги с таким жанром нельзя!
+        /// Книга + жанр + автор
+        /// </summary>
         [Route("[action]")]
         [HttpPost]
         public IActionResult PostAddGenreToBook([FromBody] BookDto bookDto)
         {
-            //Каждый раз инкрементирует Id в базе, из за чего появляются дупликаты отличающиеся только Id
             try
             {
                 var book = _bookService.GetBook(bookDto.Id);
@@ -161,7 +151,7 @@ namespace Simbir.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest("Книга не была добавлена! " + ex.Message);
+                return BadRequest(ex.Message);
             }
         }
 
@@ -179,12 +169,16 @@ namespace Simbir.Controllers
                 });
                 return Ok();
             }
-            catch
+            catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
         }
 
+        /// <summary>
+        /// Часть 2 п 7.2.1 Книга может быть добавлена (POST)
+        /// (вместе с автором и жанром) книга + автор + жанр
+        /// </summary>
         [Route("[action]")]
         [HttpPost]
         public IActionResult PostAddBook([FromBody] BookDto bookDto)
@@ -210,24 +204,37 @@ namespace Simbir.Controllers
             }
         }
 
+        /// <summary>
+        /// Часть 2 п 7.2.2 Книга может быть удалена из списка библиотеки 
+        /// (но только если она не у пользователя) по ID
+        /// (ок, или ошибка, что книга у пользователя)
+        /// </summary>
         [Route("[action]")]
         [HttpDelete]
         public IActionResult DeleteBook([FromBody] BookDto bookDto)
         {
             try
             {
-                var genres = _genreService.GetAllGenres();
-                var book = _bookService.GetBook(bookDto.Id);
-                bookDto.Genres.ForEach(genre =>
+                var cards = _libraryCardService.GetAllCards().Where(card => card.BookId == bookDto.Id);
+                if (cards == null)
                 {
-                    _bookGenreService.DeleteBookGenre(book, (Genre)genre);
-                });
-                _bookService.DeleteBook(book);
-                return Ok();
+                    var genres = _genreService.GetAllGenres();
+                    var book = _bookService.GetBook(bookDto.Id);
+                    bookDto.Genres.ForEach(genre =>
+                    {
+                        _bookGenreService.DeleteBookGenre(book, (Genre)genre);
+                    });
+                    _bookService.DeleteBook(book);
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest("Книга у пользователя!");
+                }
             }
-            catch
+            catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
         }
 
@@ -240,19 +247,11 @@ namespace Simbir.Controllers
                 Book book = (Book)bookDto;
                 return Ok(_bookService.UpdateBook(book));
             }
-            catch
+            catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
-
         }
-
-
-        ///// <summary>
-        ///// Часть 2.2 п.2 Добавление возможности сделать
-        ///// запрос с сортировкой по автору, жанру или имени книги
-        ///// </summary>
-        ///// <returns></returns>
 
         [Route("[action]/SortBy")]
         [HttpGet]
@@ -262,9 +261,9 @@ namespace Simbir.Controllers
             {
                 return Ok(_bookService.GetSortedBy(sortBy));
             }
-            catch
+            catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
         }
     }
