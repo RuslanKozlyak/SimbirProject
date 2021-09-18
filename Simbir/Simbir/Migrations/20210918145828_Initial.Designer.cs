@@ -10,8 +10,8 @@ using Repository;
 namespace Simbir.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210912135332_NullableBase")]
-    partial class NullableBase
+    [Migration("20210918145828_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,13 +24,11 @@ namespace Simbir.Migrations
             modelBuilder.Entity("Data.DTO.Author", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasColumnName("id")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("id");
 
-                    b.Property<DateTime?>("AddedDate")
-                        .HasColumnType("datetime2")
+                    b.Property<DateTimeOffset?>("AddedDate")
+                        .HasColumnType("datetimeoffset")
                         .HasColumnName("added_date");
 
                     b.Property<string>("FirstName")
@@ -47,9 +45,13 @@ namespace Simbir.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("middle_name");
 
-                    b.Property<DateTime?>("ModifiedDate")
-                        .HasColumnType("datetime2")
+                    b.Property<DateTimeOffset?>("ModifiedDate")
+                        .HasColumnType("datetimeoffset")
                         .HasColumnName("modified_date");
+
+                    b.Property<int?>("Version")
+                        .HasColumnType("int")
+                        .HasColumnName("version");
 
                     b.HasKey("Id");
 
@@ -59,27 +61,33 @@ namespace Simbir.Migrations
             modelBuilder.Entity("Data.DTO.Book", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasColumnName("id")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("id");
 
-                    b.Property<DateTime?>("AddedDate")
-                        .HasColumnType("datetime2")
+                    b.Property<DateTimeOffset?>("AddedDate")
+                        .HasColumnType("datetimeoffset")
                         .HasColumnName("added_date");
 
                     b.Property<int>("AuthorId")
                         .HasColumnType("int")
                         .HasColumnName("author_id");
 
-                    b.Property<DateTime?>("ModifiedDate")
-                        .HasColumnType("datetime2")
+                    b.Property<DateTimeOffset?>("ModifiedDate")
+                        .HasColumnType("datetimeoffset")
                         .HasColumnName("modified_date");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("name");
+
+                    b.Property<int?>("Version")
+                        .HasColumnType("int")
+                        .HasColumnName("version");
+
+                    b.Property<DateTime?>("YearOfWriting")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("year_of_writing");
 
                     b.HasKey("Id");
 
@@ -91,13 +99,11 @@ namespace Simbir.Migrations
             modelBuilder.Entity("Data.DTO.BookGenre", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasColumnName("id")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("id");
 
-                    b.Property<DateTime?>("AddedDate")
-                        .HasColumnType("datetime2")
+                    b.Property<DateTimeOffset?>("AddedDate")
+                        .HasColumnType("datetimeoffset")
                         .HasColumnName("added_date");
 
                     b.Property<int>("BookId")
@@ -108,9 +114,13 @@ namespace Simbir.Migrations
                         .HasColumnType("int")
                         .HasColumnName("genre_id");
 
-                    b.Property<DateTime?>("ModifiedDate")
-                        .HasColumnType("datetime2")
+                    b.Property<DateTimeOffset?>("ModifiedDate")
+                        .HasColumnType("datetimeoffset")
                         .HasColumnName("modified_date");
+
+                    b.Property<int?>("Version")
+                        .HasColumnType("int")
+                        .HasColumnName("version");
 
                     b.HasKey("Id");
 
@@ -124,13 +134,11 @@ namespace Simbir.Migrations
             modelBuilder.Entity("Data.DTO.Genre", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasColumnName("id")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("id");
 
-                    b.Property<DateTime?>("AddedDate")
-                        .HasColumnType("datetime2")
+                    b.Property<DateTimeOffset?>("AddedDate")
+                        .HasColumnType("datetimeoffset")
                         .HasColumnName("added_date");
 
                     b.Property<string>("GenreName")
@@ -138,9 +146,13 @@ namespace Simbir.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("genre_name");
 
-                    b.Property<DateTime?>("ModifiedDate")
-                        .HasColumnType("datetime2")
+                    b.Property<DateTimeOffset?>("ModifiedDate")
+                        .HasColumnType("datetimeoffset")
                         .HasColumnName("modified_date");
+
+                    b.Property<int?>("Version")
+                        .HasColumnType("int")
+                        .HasColumnName("version");
 
                     b.HasKey("Id");
 
@@ -150,13 +162,11 @@ namespace Simbir.Migrations
             modelBuilder.Entity("Data.DTO.Human", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasColumnName("id")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("id");
 
-                    b.Property<DateTime?>("AddedDate")
-                        .HasColumnType("datetime2")
+                    b.Property<DateTimeOffset?>("AddedDate")
+                        .HasColumnType("datetimeoffset")
                         .HasColumnName("added_date");
 
                     b.Property<string>("Birthday")
@@ -177,9 +187,13 @@ namespace Simbir.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("middle_name");
 
-                    b.Property<DateTime?>("ModifiedDate")
-                        .HasColumnType("datetime2")
+                    b.Property<DateTimeOffset?>("ModifiedDate")
+                        .HasColumnType("datetimeoffset")
                         .HasColumnName("modified_date");
+
+                    b.Property<int?>("Version")
+                        .HasColumnType("int")
+                        .HasColumnName("version");
 
                     b.HasKey("Id");
 
@@ -189,30 +203,32 @@ namespace Simbir.Migrations
             modelBuilder.Entity("Data.DTO.LibraryCard", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasColumnName("id")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("id");
 
-                    b.Property<DateTime?>("AddedDate")
-                        .HasColumnType("datetime2")
+                    b.Property<DateTimeOffset?>("AddedDate")
+                        .HasColumnType("datetimeoffset")
                         .HasColumnName("added_date");
 
                     b.Property<int>("BookId")
                         .HasColumnType("int")
                         .HasColumnName("book_id");
 
-                    b.Property<DateTimeOffset>("Date")
-                        .HasColumnType("datetimeoffset")
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2")
                         .HasColumnName("pickup_date");
 
                     b.Property<int>("HumanId")
                         .HasColumnType("int")
                         .HasColumnName("person_id");
 
-                    b.Property<DateTime?>("ModifiedDate")
-                        .HasColumnType("datetime2")
+                    b.Property<DateTimeOffset?>("ModifiedDate")
+                        .HasColumnType("datetimeoffset")
                         .HasColumnName("modified_date");
+
+                    b.Property<int?>("Version")
+                        .HasColumnType("int")
+                        .HasColumnName("version");
 
                     b.HasKey("Id");
 

@@ -21,7 +21,7 @@ namespace Data.Mapping
             entityBuilder.Property(lc => lc.Date).IsRequired();
             entityBuilder.Property(lc => lc.AddedDate);
             entityBuilder.Property(lc => lc.ModifiedDate);
-            //entityBuilder.Property(lc => lc.Version);
+            entityBuilder.Property(lc => lc.Version);
 
             entityBuilder.HasOne(human => human.Human)
                 .WithMany(lc => lc.LibraryCard)

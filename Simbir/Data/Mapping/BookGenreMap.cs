@@ -20,7 +20,7 @@ namespace Data.Mapping
             entityBuilder.Property(bookGenre => bookGenre.GenreId).IsRequired();
             entityBuilder.Property(bookGenre => bookGenre.AddedDate);
             entityBuilder.Property(bookGenre => bookGenre.ModifiedDate);
-            //entityBuilder.Property(bookGenre => bookGenre.Version);
+            entityBuilder.Property(bookGenre => bookGenre.Version);
 
             entityBuilder.HasOne(book => book.Book)
                 .WithMany(bookGenre => bookGenre.BookGenre)

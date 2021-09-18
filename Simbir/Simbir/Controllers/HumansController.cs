@@ -138,16 +138,13 @@ namespace Simbir.Controllers
         {
             try
             {
-                var model = new List<LibraryCardDto>();
                 Human human = (Human)humanDto;
                 humanDto.Books.ForEach(bookDto =>
                 {
                     Book book = (Book)bookDto;
                     var addedCard = _libraryCardService.AddBookToPerson(human, book);
-                    LibraryCardDto cardDto = (LibraryCardDto)addedCard;
-                    model.Add(cardDto);
                 });
-                return Ok(model);
+                return Ok("Книга добавлена пользователю!");
             }
             catch (Exception ex)
             {
@@ -171,7 +168,7 @@ namespace Simbir.Controllers
                     Book book = (Book)bookDto;
                     _libraryCardService.DeleteBookFromPerson(human, book);
                 });
-                return Ok();
+                return Ok("Книга удалена у пользователя!");
             }
             catch (Exception ex)
             {
@@ -255,7 +252,7 @@ namespace Simbir.Controllers
             try
             {
                 _humanService.DeleteHumanByName(fullName);
-                return Ok();
+                return Ok("Человек удален по ФИО!");
             }
             catch (Exception ex)
             {

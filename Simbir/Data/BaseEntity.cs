@@ -10,12 +10,13 @@ namespace Data
     public class BaseEntity
     {
         [Column("id")]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
         [Column("added_date")]
         public DateTimeOffset? AddedDate { get; set; }
         [Column("modified_date")]
         public DateTimeOffset? ModifiedDate { get; set; }
-        //[Column("version")]
-        //public int Version { get; set; }
+        [Column("version")]
+        public int? Version { get; set; }
     }
 }

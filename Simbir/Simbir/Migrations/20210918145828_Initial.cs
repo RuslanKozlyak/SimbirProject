@@ -11,71 +11,72 @@ namespace Simbir.Migrations
                 name: "author",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    id = table.Column<int>(type: "int", nullable: false),
                     first_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     last_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     middle_name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    AddedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    added_date = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    modified_date = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    version = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_author", x => x.Id);
+                    table.PrimaryKey("PK_author", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "genre",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    id = table.Column<int>(type: "int", nullable: false),
                     genre_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AddedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    added_date = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    modified_date = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    version = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_genre", x => x.Id);
+                    table.PrimaryKey("PK_genre", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "person",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    id = table.Column<int>(type: "int", nullable: false),
                     first_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     last_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     middle_name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     birth_date = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    AddedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    added_date = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    modified_date = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    version = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_person", x => x.Id);
+                    table.PrimaryKey("PK_person", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "book",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    id = table.Column<int>(type: "int", nullable: false),
                     name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     author_id = table.Column<int>(type: "int", nullable: false),
-                    AddedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    year_of_writing = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    added_date = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    modified_date = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    version = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_book", x => x.Id);
+                    table.PrimaryKey("PK_book", x => x.id);
                     table.ForeignKey(
                         name: "FK_book_author_author_id",
                         column: x => x.author_id,
                         principalTable: "author",
-                        principalColumn: "Id",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -83,27 +84,27 @@ namespace Simbir.Migrations
                 name: "book_genre",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    id = table.Column<int>(type: "int", nullable: false),
                     book_id = table.Column<int>(type: "int", nullable: false),
                     genre_id = table.Column<int>(type: "int", nullable: false),
-                    AddedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    added_date = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    modified_date = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    version = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_book_genre", x => x.Id);
+                    table.PrimaryKey("PK_book_genre", x => x.id);
                     table.ForeignKey(
                         name: "FK_book_genre_book_book_id",
                         column: x => x.book_id,
                         principalTable: "book",
-                        principalColumn: "Id",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_book_genre_genre_genre_id",
                         column: x => x.genre_id,
                         principalTable: "genre",
-                        principalColumn: "Id",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -111,28 +112,28 @@ namespace Simbir.Migrations
                 name: "library_card",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    id = table.Column<int>(type: "int", nullable: false),
                     person_id = table.Column<int>(type: "int", nullable: false),
                     book_id = table.Column<int>(type: "int", nullable: false),
-                    pickup_date = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    AddedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    pickup_date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    added_date = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    modified_date = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    version = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_library_card", x => x.Id);
+                    table.PrimaryKey("PK_library_card", x => x.id);
                     table.ForeignKey(
                         name: "FK_library_card_book_book_id",
                         column: x => x.book_id,
                         principalTable: "book",
-                        principalColumn: "Id",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_library_card_person_person_id",
                         column: x => x.person_id,
                         principalTable: "person",
-                        principalColumn: "Id",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
 

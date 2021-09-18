@@ -17,8 +17,8 @@ namespace Data.DTO
         public string Title { get; set; }
         [Column("author_id")]
         public int AuthorId { get; set; }
-        //[Column("year_of_writing")]
-        //public DateTime? YearOfWriting { get; set; }
+        [Column("year_of_writing")]
+        public DateTime? YearOfWriting { get; set; }
 
         [NotMapped]
         public Author Author { get; set; }

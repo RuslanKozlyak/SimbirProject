@@ -19,7 +19,7 @@ namespace Data.Mapping
             entityBuilder.Property(genre => genre.GenreName).IsRequired();
             entityBuilder.Property(genre => genre.AddedDate);
             entityBuilder.Property(genre => genre.ModifiedDate);
-            //entityBuilder.Property(genre => genre.Version);
+            entityBuilder.Property(genre => genre.Version);
         }
     }
 }

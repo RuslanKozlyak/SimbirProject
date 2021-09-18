@@ -42,6 +42,7 @@ namespace Simbir.DTO
         {
             return new Book
             {
+                Id = dto.Id,
                 Title = dto.Title,
                 AuthorId = dto.AuthorId
             };

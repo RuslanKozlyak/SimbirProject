@@ -18,10 +18,10 @@ namespace Data.Mapping
             entityBuilder.HasKey(book => book.Id);
             entityBuilder.Property(book => book.Title).IsRequired();
             entityBuilder.Property(book => book.AuthorId).IsRequired();
-            //entityBuilder.Property(book => book.YearOfWriting);
+            entityBuilder.Property(book => book.YearOfWriting);
             entityBuilder.Property(book => book.AddedDate);
             entityBuilder.Property(book => book.ModifiedDate);
-            //entityBuilder.Property(book => book.Version);
+            entityBuilder.Property(book => book.Version);
 
             entityBuilder.HasOne(book => book.Author)
                 .WithMany(author => author.Books)
