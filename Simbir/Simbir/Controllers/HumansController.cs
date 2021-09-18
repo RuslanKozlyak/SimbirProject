@@ -78,13 +78,21 @@ namespace Simbir.Controllers
         [HttpGet]
         public IActionResult GetQuery([FromQuery] string query)
         {
-            var model = new List<HumanDto>();
-            _humanService.GetHumanByQuery(query).ToList().ForEach(human =>
+            try
             {
-                HumanDto humanDto = (HumanDto)human;
-                model.Add(humanDto);
-            });
-            return Ok(model);
+                var model = new List<HumanDto>();
+                _humanService.GetHumanByQuery(query).ToList().ForEach(human =>
+                {
+                    HumanDto humanDto = (HumanDto)human;
+                    model.Add(humanDto);
+                });
+                return Ok(model);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+           
         }
 
         [Route("[action]")]
@@ -134,32 +142,64 @@ namespace Simbir.Controllers
         [HttpPost]
         public IActionResult PostAddHuman([FromBody] HumanDto humanDto)
         {
-            Human human = (Human)humanDto;
-            return Ok(_humanService.AddHuman(human));
+            try
+            {
+                Human human = (Human)humanDto;
+                return Ok(_humanService.AddHuman(human));
+            }
+            catch
+            {
+                return BadRequest();
+            }
+            
         }
 
         [Route("[action]")]
         [HttpDelete]
         public IActionResult DeleteHuman([FromBody] HumanDto humanDto)
         {
-            Human human = (Human)humanDto;
-            return Ok(_humanService.DeleteHuman(human));
+            try
+            {
+                Human human = (Human)humanDto;
+                return Ok(_humanService.DeleteHuman(human));
+            }
+            catch
+            {
+                return BadRequest();
+            }
+            
         }
 
         [Route("[action]")]
         [HttpPost]
         public IActionResult UpdateHuman([FromBody] HumanDto humanDto)
         {
-            Human human = (Human)humanDto;
-            return Ok(_humanService.UpdateHuman(human));
+            try
+            {
+                Human human = (Human)humanDto;
+                return Ok(_humanService.UpdateHuman(human));
+            }
+            catch
+            {
+               return BadRequest();
+            }
+            
         }
 
         [Route("[action]")]
         [HttpDelete]
         public IActionResult DeleteHumanByName([FromQuery] string fullName)
         {
-            _humanService.DeleteHumanByName(fullName);
-            return Ok();
+            try
+            {
+                _humanService.DeleteHumanByName(fullName);
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
+            
         }
     }
 }

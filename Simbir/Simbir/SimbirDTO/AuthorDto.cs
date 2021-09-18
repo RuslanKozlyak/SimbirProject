@@ -17,6 +17,20 @@ namespace Simbir.DTO
         public string LastName { get; set; }
         public string MiddleName { get; set; }
 
+        public List<BookDto> Books
+        {
+            get
+            {
+                return books;
+            }
+            set
+            {
+                books = value;
+            }
+        }
+
+        private List<BookDto> books = new List<BookDto>();
+
         public static explicit operator Author(AuthorDto dto)
         {
             return new Author
@@ -30,7 +44,7 @@ namespace Simbir.DTO
 
         public static implicit operator AuthorDto(Author human)
         {
-            return new Author
+            return new AuthorDto
             {
                 Id = human.Id,
                 FirstName = human.FirstName,

@@ -17,6 +17,7 @@ namespace Service
         {
             _bookRepository = bookRepository;
         }
+
         public IEnumerable<Book> GetAllBooks()
         {
             return _bookRepository.GetAll();
@@ -46,9 +47,10 @@ namespace Service
             return null;
         }
 
-        public void AddBook(Book book)
+        public Book AddBook(Book book)
         {
             _bookRepository.Insert(book);
+            return _bookRepository.Get(book.Id);
         }
 
         public void DeleteBook(Book book)
@@ -56,9 +58,10 @@ namespace Service
             _bookRepository.Remove(book);
         }
 
-        public void UpdateBook(Book book)
+        public Book UpdateBook(Book book)
         {
             _bookRepository.Update(book);
+            return _bookRepository.Get(book.Id);
         }
     }
 }

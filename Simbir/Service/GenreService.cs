@@ -27,17 +27,17 @@ namespace Service
             return _genreRepository.GetAll();
         }
 
-        public void AddBookToPerson(Genre genre)
+        public void AddGenre(Genre genre)
         {
             _genreRepository.Insert(genre);
         }
 
-        public void DeleteBookFromPerson(Genre genre)
+        public void DeleteGenre(Genre genre)
         {
             _genreRepository.Remove(genre);
         }
 
-        public void UpdateBookToPerson(Genre genre)
+        public void UpdateGenre(Genre genre)
         {
             _genreRepository.Update(genre);
         }

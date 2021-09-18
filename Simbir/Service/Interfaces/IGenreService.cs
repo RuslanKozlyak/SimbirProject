@@ -8,8 +8,8 @@ namespace Service.Interfaces
         
         public Genre GetGenre(int genreId);
         public IEnumerable<Genre> GetAllGenres();
-        public void AddBookToPerson(Genre genre);
-        public void DeleteBookFromPerson(Genre genre);
-        public void UpdateBookToPerson(Genre genre);
+        public void AddGenre(Genre genre);
+        public void DeleteGenre(Genre genre);
+        public void UpdateGenre(Genre genre);
     }
 }

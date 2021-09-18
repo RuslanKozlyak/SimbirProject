@@ -10,9 +10,9 @@ namespace Service.Interfaces
     public interface IBookGenreService
     {
         public IEnumerable<BookGenre> GetAllBookGenres();
-        public IEnumerable<BookGenre> GetBookGenre(int genreId);
-        public void AddBookGenre(BookGenre bookGenre);
-        public void DeleteBookGenre(BookGenre bookGenre);
-        public void UpdateBookGenre(BookGenre bookGenre);
+        public IEnumerable<BookGenre> GetBookGenre(int bookId);
+        public BookGenre AddGenreBook(Book book, Genre genre);
+        public void DeleteBookGenre(Book book, Genre genre);
+        public BookGenre UpdateBookGenre(Book book, Genre genre);
     }
 }

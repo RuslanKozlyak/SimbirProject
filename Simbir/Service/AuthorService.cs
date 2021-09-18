@@ -3,6 +3,7 @@ using Repository;
 using Service.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Service
 {
@@ -22,6 +23,14 @@ namespace Service
         public IEnumerable<Author> GetAllAuthors()
         {
             return _authorRepository.GetAll();
+        }
+
+        public IEnumerable<Author> GetAuthorByQuery(string query)
+        {
+            var findedAuthors = _authorRepository.GetAll()
+              .Where(author => $"{author.FirstName}{author.LastName}{author.MiddleName}"
+              .ToUpper().Contains(query.ToUpper()));
+            return findedAuthors;
         }
 
         public void AddAuthor(Author author)

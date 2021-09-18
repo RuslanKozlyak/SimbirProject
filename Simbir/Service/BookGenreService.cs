@@ -1,6 +1,7 @@
 ﻿using Data.DTO;
 using Repository;
 using Service.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -19,24 +20,43 @@ namespace Service
             return _bgRepository.GetAll();
         }
 
-        public IEnumerable<BookGenre> GetBookGenre(int genreId)
+        public IEnumerable<BookGenre> GetBookGenre(int bookId)
         {
-            return _bgRepository.GetAll().Where(lc => lc.BookId == genreId);
+            return _bgRepository.GetAll().Where(lc => lc.BookId == bookId);
         }
 
-        public void AddBookGenre(BookGenre bookGenre)
+        public BookGenre AddGenreBook(Book book,Genre genre)
         {
+            BookGenre bookGenre = new BookGenre
+            {
+                BookId = book.Id,
+                GenreId = genre.Id,
+            };
             _bgRepository.Insert(bookGenre);
+            return bookGenre;
         }
 
-        public void DeleteBookGenre(BookGenre bookGenre)
+        public void DeleteBookGenre(Book book, Genre genre)
         {
-            _bgRepository.Remove(bookGenre);
+            try
+            {
+                var deletedGenre = _bgRepository.GetAll()
+                .FirstOrDefault(bookGenre => bookGenre.GenreId == genre.Id & bookGenre.BookId == book.Id);
+                _bgRepository.Remove(deletedGenre);
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+            
         }
 
-        public void UpdateBookGenre(BookGenre bookGenre)
+        public BookGenre UpdateBookGenre(Book book, Genre genre)
         {
-            _bgRepository.Update(bookGenre);
+            var updatedGenre = _bgRepository.GetAll()
+                .FirstOrDefault(bookGenre => bookGenre.GenreId == genre.Id & bookGenre.BookId == book.Id);
+            _bgRepository.Update(updatedGenre);
+            return updatedGenre;
         }
     }
 }

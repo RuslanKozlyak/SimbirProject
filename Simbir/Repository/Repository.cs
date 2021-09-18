@@ -18,6 +18,7 @@ namespace Repository
             this._context = context;
             _entities = context.Set<T>();
         }
+
         public IEnumerable<T> GetAll()
         {
             return _entities.AsEnumerable();
@@ -39,24 +40,16 @@ namespace Repository
             {
                 throw new ArgumentNullException("entity");
             }
-            if (AlreadyExist(entity.Id) == false)
+            entity.AddedDate = DateTimeOffset.UtcNow;
+            entity.ModifiedDate = DateTimeOffset.UtcNow;
+            _entities.Add(entity);
+            try
             {
-                entity.AddedDate = DateTimeOffset.UtcNow;
-                entity.ModifiedDate = DateTimeOffset.UtcNow;
-                _entities.Add(entity);
-                try
-                {
-                    _context.SaveChanges();
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
+                _context.SaveChanges();
             }
-            else
+            catch (Exception ex)
             {
-                //Какую ошибку лучше использовать, если будет попытка добавить дубликат?
-                throw new Exception("entity");
+                throw ex;
             }
         }
 
@@ -66,15 +59,8 @@ namespace Repository
             {
                 throw new ArgumentNullException("entity");
             }
-            if (AlreadyExist(entity.Id) == true)
-            {
                 entity.ModifiedDate = DateTimeOffset.UtcNow;
                 _context.SaveChanges();
-            }
-            else
-            {
-                throw new Exception("entity");
-            }
         }
 
         public void Remove(T entity)
@@ -83,7 +69,7 @@ namespace Repository
             {
                 throw new ArgumentNullException("entity");
             }
-            if (Get(entity.Id) == null)
+            if (Get(entity.Id) != null)
             {
                 _entities.Remove(entity);
                 _context.SaveChanges();
@@ -105,15 +91,6 @@ namespace Repository
                 throw new Exception();
             }
 
-        }
-        public bool AlreadyExist(int id)
-        {
-            var findedEntity = _entities.FirstOrDefault(s => s.Id == id);
-            if (findedEntity == null)
-            {
-                return false;
-            }
-            return true;
         }
     }
 }

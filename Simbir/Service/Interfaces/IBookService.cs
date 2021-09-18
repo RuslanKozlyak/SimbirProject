@@ -9,8 +9,9 @@ namespace Service.Interfaces
         public Book GetBook(int bookId);
         public IEnumerable<Book> GetAuthorBooks(int authorId);
         public IEnumerable<Book> GetSortedBy(string sortBy);
-        public void AddBook(Book book);
+        public Book AddBook(Book book);
         public void DeleteBook(Book book);
+        public Book UpdateBook(Book book);
 
     }
 }

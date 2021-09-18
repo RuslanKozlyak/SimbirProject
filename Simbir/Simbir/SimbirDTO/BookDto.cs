@@ -13,6 +13,8 @@ namespace Simbir.DTO
         /// Часть 2. п.2.2 Создание класса репрезентирующего книгу
         /// Часть 2.2 п.1 Добавление валицации, все поля NotNull
         /// </summary>
+        /// 
+        
         [Required]
         public int Id { get; set; }
         [Required]
@@ -20,13 +22,26 @@ namespace Simbir.DTO
         [Required]
         public int AuthorId { get; set; }
 
-        public static List<BookDto> BookList { get; set; }
+        public AuthorDto Author { get; set; }
+        [Required]
+        public List<GenreDto> Genres { 
+            get 
+            { 
+                return genres;
+            }
+            set
+            {
+                genres = value;
+            }
+        }
+        
+        private List<GenreDto> genres = new List<GenreDto>();
+
 
         public static explicit operator Book(BookDto dto)
         {
             return new Book
             {
-                Id = dto.Id,
                 Title = dto.Title,
                 AuthorId = dto.AuthorId
             };

@@ -11,6 +11,7 @@ namespace Service.Interfaces
     {
         public Author GetAuthor(int authorId);
         public IEnumerable<Author> GetAllAuthors();
+        public IEnumerable<Author> GetAuthorByQuery(string query);
         public void AddAuthor(Author author);
         public void DeleteAuthor(Author author);
         public void UpdateAuthor(Author author);
