@@ -1,15 +1,12 @@
 ﻿using Data.DTO;
 using Repository;
 using Service.Interfaces;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Service
 {
-    public class BookService:IBookService
+    public class BookService : IBookService
     {
         private IRepository<Book> _bookRepository;
 

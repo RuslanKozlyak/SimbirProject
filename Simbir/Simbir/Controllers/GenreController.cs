@@ -47,7 +47,7 @@ namespace Simbir.Controllers
                 });
                 return Ok(model);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -84,10 +84,10 @@ namespace Simbir.Controllers
                 string genreStatistic = String.Empty;
                 _genreService.GetAllGenres().ToList().ForEach(genre =>
                 {
-                    var count  = _bookGenreService.GetBookGenre(genre.Id).Count();
+                    var count = _bookGenreService.GetBookGenre(genre.Id).Count();
                     genreStatistic += $"{genre.GenreName} - {count} \n";
                 });
-                
+
                 return Ok(genreStatistic);
             }
             catch (Exception ex)

@@ -36,7 +36,7 @@ namespace Simbir.Middleware
                     ts.Hours, ts.Minutes, ts.Seconds,
                     ts.Milliseconds / 10);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
             }
@@ -45,7 +45,7 @@ namespace Simbir.Middleware
                 _logger.LogInformation($"Processing time of " +
                     $"{httpContext.Request?.Method} request = {elapsedTime}");
             }
-            
+
         }
     }
 }

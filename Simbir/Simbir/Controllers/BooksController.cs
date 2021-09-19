@@ -42,7 +42,7 @@ namespace Simbir.Controllers
                 _bookService.GetAllBooks().ToList().ForEach(book =>
                 {
                     var author = _authorService.GetAuthor(book.AuthorId);
-                    BookDto bookDto = (Book)book;
+                    BookDto bookDto = book;
                     bookDto.Author = author;
                     _bookGenreService.GetBookGenre(book.Id).ToList().ForEach(bookGenre =>
                     {
@@ -76,7 +76,7 @@ namespace Simbir.Controllers
                     _bookService.GetAuthorBooks(author.Id).ToList().ForEach(book =>
                     {
                         var author = _authorService.GetAuthor(book.AuthorId);
-                        BookDto bookDto = (Book)book;
+                        BookDto bookDto = book;
                         bookDto.Author = author;
                         _bookGenreService.GetBookGenre(book.Id).ToList().ForEach(bookGenre =>
                         {
@@ -110,7 +110,7 @@ namespace Simbir.Controllers
                 {
                     var book = _bookService.GetBook(bg.BookId);
                     var author = _authorService.GetAuthor(book.AuthorId);
-                    BookDto bookDto = (Book)book;
+                    BookDto bookDto = book;
                     bookDto.Author = author;
                     _bookGenreService.GetBookGenre(book.Id).ToList().ForEach(bookGenre =>
                     {
@@ -198,7 +198,7 @@ namespace Simbir.Controllers
                 });
                 return Ok("Книга добавлена!");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }

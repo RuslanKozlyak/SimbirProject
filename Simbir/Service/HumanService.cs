@@ -1,11 +1,8 @@
 ﻿using Data.DTO;
 using Repository;
 using Service.Interfaces;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Service
 {
@@ -33,7 +30,7 @@ namespace Service
             var findedHuman = _humanRepository.GetAll()
                .Where(findedHuman => $"{findedHuman.FirstName}{findedHuman.LastName}{findedHuman.MiddleName}".ToUpper().Contains(query.ToUpper()));
             return findedHuman;
-             
+
         }
 
         public IEnumerable<Human> GetSortedBy(string sortBy)
@@ -66,7 +63,7 @@ namespace Service
         {
             var removedHumans = _humanRepository.GetAll()
                .Where(findedHuman => $"{findedHuman.FirstName}{findedHuman.LastName}{findedHuman.MiddleName}".ToUpper() == humanFullName.ToUpper());
-            foreach(var person in removedHumans)
+            foreach (var person in removedHumans)
                 _humanRepository.Remove(person);
         }
     }

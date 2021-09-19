@@ -25,7 +25,7 @@ namespace Service
             return _bgRepository.GetAll().Where(lc => lc.BookId == bookId);
         }
 
-        public BookGenre AddGenreBook(Book book,Genre genre)
+        public BookGenre AddGenreBook(Book book, Genre genre)
         {
             BookGenre bookGenre = new BookGenre
             {
@@ -44,11 +44,11 @@ namespace Service
                 .FirstOrDefault(bookGenre => bookGenre.GenreId == genre.Id & bookGenre.BookId == book.Id);
                 _bgRepository.Remove(deletedGenre);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex;
             }
-            
+
         }
 
         public BookGenre UpdateBookGenre(Book book, Genre genre)

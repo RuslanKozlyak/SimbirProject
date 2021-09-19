@@ -5,7 +5,7 @@ namespace Service.Interfaces
 {
     public interface IGenreService
     {
-        
+
         public Genre GetGenre(int genreId);
         public IEnumerable<Genre> GetAllGenres();
         public void AddGenre(Genre genre);

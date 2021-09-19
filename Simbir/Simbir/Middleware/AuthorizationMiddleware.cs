@@ -1,9 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 
 namespace Simbir.Middleware
@@ -24,7 +19,7 @@ namespace Simbir.Middleware
         {
             var authHeader = httpContext.Request.Headers["Authorization"];
 
-            if(authHeader != "Basic YWRtaW46YWRtaW4=")
+            if (authHeader != "Basic YWRtaW46YWRtaW4=")
             {
                 await httpContext.Response.WriteAsync("Authorization error!");
             }

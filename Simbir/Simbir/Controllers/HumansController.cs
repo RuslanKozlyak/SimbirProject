@@ -44,7 +44,7 @@ namespace Simbir.Controllers
                 var model = new List<HumanDto>();
                 _humanService.GetAllHumans().ToList().ForEach(human =>
                 {
-                    HumanDto humanDto = (HumanDto)human;
+                    HumanDto humanDto = human;
                     model.Add(humanDto);
                 });
                 return Ok(model);
@@ -64,7 +64,7 @@ namespace Simbir.Controllers
                 var model = new List<AuthorDto>();
                 _authorService.GetAllAuthors().ToList().ForEach(author =>
                 {
-                    AuthorDto authorDto = (AuthorDto)author;
+                    AuthorDto authorDto = author;
                     model.Add(authorDto);
                 });
                 return Ok(model);
@@ -84,7 +84,7 @@ namespace Simbir.Controllers
                 var model = new List<HumanDto>();
                 _humanService.GetHumanByQuery(query).ToList().ForEach(human =>
                 {
-                    HumanDto humanDto = (HumanDto)human;
+                    HumanDto humanDto = human;
                     model.Add(humanDto);
                 });
                 return Ok(model);
@@ -109,16 +109,16 @@ namespace Simbir.Controllers
                 var model = new List<BookDto>();
                 _libraryCardService.GetHumanBooks(humanId).ToList().ForEach(humanBook =>
                 {
-                        var book= _bookService.GetBook(humanBook.BookId);
-                        var author = _authorService.GetAuthor(book.AuthorId);
-                        BookDto bookDto = (Book)book;
-                        bookDto.Author = author;
-                        _bookGenreService.GetBookGenre(book.Id).ToList().ForEach(bookGenre =>
-                        {
-                            var genre = _genreService.GetGenre(bookGenre.GenreId);
-                            bookDto.Genres.Add(genre);
-                        });
-                        model.Add(bookDto);
+                    var book = _bookService.GetBook(humanBook.BookId);
+                    var author = _authorService.GetAuthor(book.AuthorId);
+                    BookDto bookDto = book;
+                    bookDto.Author = author;
+                    _bookGenreService.GetBookGenre(book.Id).ToList().ForEach(bookGenre =>
+                    {
+                        var genre = _genreService.GetGenre(bookGenre.GenreId);
+                        bookDto.Genres.Add(genre);
+                    });
+                    model.Add(bookDto);
                 });
                 return Ok(model);
             }

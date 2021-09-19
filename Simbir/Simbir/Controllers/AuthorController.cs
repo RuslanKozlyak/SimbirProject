@@ -48,7 +48,7 @@ namespace Simbir.Controllers
                     {
                         _bookGenreService.GetBookGenre(book.Id).ToList().ForEach(bookGenre =>
                         {
-                            BookDto bookDto = (Book)book;
+                            BookDto bookDto = book;
                             var genre = _genreService.GetGenre(bookGenre.GenreId);
                             bookDto.Genres.Add(genre);
                             authorDto.Books.Add(bookDto);
@@ -78,7 +78,7 @@ namespace Simbir.Controllers
                 _bookService.GetAuthorBooks(authorId).ToList().ForEach(book =>
                 {
                     var author = _authorService.GetAuthor(book.AuthorId);
-                    BookDto bookDto = (Book)book;
+                    BookDto bookDto = book;
                     bookDto.Author = author;
                     _bookGenreService.GetBookGenre(book.Id).ToList().ForEach(bookGenre =>
                     {
@@ -122,7 +122,7 @@ namespace Simbir.Controllers
                     model.Reverse();
                     return Ok(model);
                 }
-                    
+
             }
             catch (Exception ex)
             {

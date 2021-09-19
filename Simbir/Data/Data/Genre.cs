@@ -1,10 +1,5 @@
-﻿
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Data.DTO
 {
@@ -17,6 +12,6 @@ namespace Data.DTO
         [Column("genre_name")]
         public string GenreName { get; set; }
 
-        public ICollection<BookGenre>BookGenre { get; set; }
+        public ICollection<BookGenre> BookGenre { get; set; }
     }
 }

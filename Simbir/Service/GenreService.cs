@@ -1,15 +1,11 @@
 ﻿using Data.DTO;
 using Repository;
 using Service.Interfaces;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Service
 {
-    public class GenreService:IGenreService
+    public class GenreService : IGenreService
     {
         private IRepository<Genre> _genreRepository;
         public GenreService(IRepository<Genre> genreRepository)
