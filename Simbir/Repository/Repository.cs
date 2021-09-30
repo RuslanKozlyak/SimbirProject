@@ -1,38 +1,45 @@
-﻿using Data;
+﻿using Domain.Data;
+using Domain.RepositoryInterfaces;
 using Microsoft.EntityFrameworkCore;
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using System.Linq.Expressions;
 
 namespace Repository
 {
-    /// <summary>
-    /// Часть 2 п 6 Реализовать репозитории под все сущности кроме референсных
-    /// </summary>
     public class Repository<T> : IRepository<T> where T : BaseEntity
     {
         private readonly DataContext _context;
+        private readonly DbSet<T> _entities;
 
-        private DbSet<T> _entities;
         public Repository(DataContext context)
         {
             this._context = context;
             _entities = context.Set<T>();
         }
 
-        public IEnumerable<T> GetAll()
+        public IEnumerable<T> GetAll(params Expression<Func<T, object>>[] includes)
         {
-            return _entities.AsEnumerable();
+            IQueryable<T> query = _entities;
+            foreach (Expression<Func<T, object>> include in includes)
+            {
+                query = query.Include(include);
+            }
+            return query.AsEnumerable();
         }
 
-        public T Get(int id)
+        public T Get(int id, params Expression<Func<T, object>>[] includes)
         {
-            var findedEntity = _entities.FirstOrDefault(s => s.Id == id);
+            IQueryable<T> query = _entities;
+            foreach (Expression<Func<T, object>> include in includes)
+            {
+                query = query.Include(include);
+            }
+            var findedEntity = query.FirstOrDefault(s => s.Id == id);
             if (findedEntity == null)
             {
-                throw new ArgumentNullException("id");
+                throw new Exception($"User with Id {id} not found");
             }
             return findedEntity;
         }
@@ -41,26 +48,19 @@ namespace Repository
         {
             if (entity == null)
             {
-                throw new ArgumentNullException("entity");
+                throw new Exception($"User with Id {entity.Id} not found");
             }
             entity.AddedDate = DateTimeOffset.UtcNow;
             entity.ModifiedDate = DateTimeOffset.UtcNow;
             _entities.Add(entity);
-            try
-            {
-                _context.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            _context.SaveChanges();
         }
 
         public void Update(T entity)
         {
             if (entity == null)
             {
-                throw new ArgumentNullException("entity");
+                throw new Exception($"User with Id {entity.Id} not found");
             }
             entity.ModifiedDate = DateTimeOffset.UtcNow;
             _context.SaveChanges();
@@ -68,10 +68,6 @@ namespace Repository
 
         public void Remove(T entity)
         {
-            if (entity == null)
-            {
-                throw new ArgumentNullException("entity");
-            }
             if (Get(entity.Id) != null)
             {
                 _entities.Remove(entity);
@@ -79,7 +75,7 @@ namespace Repository
             }
             else
             {
-                throw new Exception("entity");
+                throw new Exception($"User with Id {entity.Id} not found");
             }
         }
 
@@ -93,7 +89,6 @@ namespace Repository
             {
                 throw new Exception();
             }
-
         }
     }
 }
