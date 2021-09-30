@@ -1,9 +1,6 @@
-﻿using AutoMapper;
-using Domain.Data;
-using Domain.DTO.BookDtos;
-using Domain.DTO.HumanDtos;
-using Domain.RepositoryInterfaces;
-using Domain.ServiceInterfaces;
+﻿using Data.DTO;
+using Repository;
+using Service.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -12,83 +9,54 @@ namespace Service
     public class HumanService : IHumanService
     {
         private readonly IRepository<Human> _humanRepository;
-        private readonly IMapper _mapper;
-        public HumanService(IRepository<Human> humanRepository, IMapper mapper)
+
+        public HumanService(IRepository<Human> humanRepository)
         {
             _humanRepository = humanRepository;
-            _mapper = mapper;
         }
 
-        public IEnumerable<HumanWithoutBooksDto> GetAllHumans()
+        public IEnumerable<Human> GetAllHumans()
         {
-            return _humanRepository.GetAll().Select(_mapper.Map<HumanWithoutBooksDto>);
+            return _humanRepository.GetAll();
         }
 
-        public HumanWithoutBooksDto GetHuman(int humanId)
+        public Human GetHuman(int humanId)
         {
-            return _mapper.Map<HumanWithoutBooksDto>(_humanRepository.Get(humanId));
+            return _humanRepository.Get(humanId);
         }
 
-        public IEnumerable<HumanWithoutBooksDto> GetHumanByQuery(string query)
+        public IEnumerable<Human> GetHumanByQuery(string query)
         {
             var findedHuman = _humanRepository.GetAll()
                .Where(findedHuman => $"{findedHuman.FirstName}{findedHuman.LastName}{findedHuman.MiddleName}".ToUpper().Contains(query.ToUpper()));
-            return findedHuman.Select(_mapper.Map<HumanWithoutBooksDto>);
+            return findedHuman;
 
         }
 
-        public IEnumerable<BookWithAuthorAndGenreDto> GetHumanBooks(int humanId)
+        public IEnumerable<Human> GetSortedBy(string sortBy)
         {
-            var books = _humanRepository.Get(humanId, include => include.Books).Books;
-            return books.Select(_mapper.Map<BookWithAuthorAndGenreDto>);
-        }
-
-        public HumanWithBooksDto AddBookToHuman(HumanWithBooksDto humanDto, int humanId)
-        {
-            var human = _humanRepository.Get(humanId);
-            foreach (var bookDto in humanDto.Books)
+            switch (sortBy.ToString().ToUpper())
             {
-                var book = _mapper.Map<Book>(bookDto);
-                if (human.Books.Contains(book) == false)
-                    human.Books.Add(book);
             }
-            _humanRepository.Update(human);
-            return _mapper.Map<HumanWithBooksDto>(_humanRepository.Get(human.Id, include => include.Books));
+            return null;
         }
 
-        public HumanWithBooksDto DelteBookFromHuman(HumanWithBooksDto humanDto, int humanId)
+        public Human AddHuman(Human human)
         {
-            var human = _humanRepository.Get(humanId);
-            foreach (var bookDto in humanDto.Books)
-            {
-                var book = _mapper.Map<Book>(bookDto);
-                if (human.Books.Contains(book) == true)
-                    human.Books.Remove(book);
-            }
-            _humanRepository.Update(human);
-            return _mapper.Map<HumanWithBooksDto>(_humanRepository.Get(human.Id, include => include.Books));
-        }
-
-        public HumanWithoutBooksDto AddHuman(HumanDto humanDto)
-        {
-            var human = _mapper.Map<Human>(humanDto);
             _humanRepository.Insert(human);
-            var insertedHuman = _humanRepository.GetAll().FirstOrDefault(b => b.Id == human.Id);
-            return _mapper.Map<HumanWithoutBooksDto>(insertedHuman);
+            return _humanRepository.Get(human.Id);
         }
 
-        public void DeleteHuman(int humanId)
+        public Human DeleteHuman(Human human)
         {
-            var book = _humanRepository.Get(humanId);
-            _humanRepository.Remove(book);
+            _humanRepository.Remove(human);
+            return human;
         }
 
-        public HumanWithoutBooksDto UpdateHuman(HumanDto humanDto)
+        public Human UpdateHuman(Human human)
         {
-            var human = _mapper.Map<Human>(humanDto);
             _humanRepository.Update(human);
-            var updatedHuman = _humanRepository.Get(human.Id);
-            return _mapper.Map<HumanWithoutBooksDto>(updatedHuman);
+            return _humanRepository.Get(human.Id);
         }
 
         public void DeleteHumanByName(string humanFullName)

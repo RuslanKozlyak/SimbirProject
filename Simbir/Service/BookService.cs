@@ -1,9 +1,6 @@
-﻿using AutoMapper;
-using Domain.Data;
-using Domain.DTO.BookDtos;
-using Domain.RepositoryInterfaces;
-using Domain.ServiceInterfaces;
-using System;
+﻿using Data.DTO;
+using Repository;
+using Service.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -11,136 +8,57 @@ namespace Service
 {
     public class BookService : IBookService
     {
-        private readonly IRepository<Book> _bookRepository;
-        private readonly IMapper _mapper;
+        private IRepository<Book> _bookRepository;
 
-        public BookService(IRepository<Book> bookRepository, IMapper mapper)
+        public BookService(IRepository<Book> bookRepository)
         {
             _bookRepository = bookRepository;
-            _mapper = mapper;
         }
 
-        public IEnumerable<BookWithAuthorAndGenreDto> GetAllBooks()
+        public IEnumerable<Book> GetAllBooks()
         {
-            return _bookRepository.GetAll(include => include.Author, include => include.Genres).Select(_mapper.Map<BookWithAuthorAndGenreDto>);
+            return _bookRepository.GetAll();
         }
 
-        public BookWithAuthorAndGenreDto GetBook(int bookId)
+        public IEnumerable<Book> GetAuthorBooks(int authorId)
         {
-            return _mapper.Map<BookWithAuthorAndGenreDto>(_bookRepository.Get(bookId, include => include.Author, include => include.Genres));
+            return _bookRepository.GetAll().Where(book => book.AuthorId == authorId);
         }
 
-        public IEnumerable<BookWithAuthorAndGenreDto> GetAuthorBooks(int authorId)
+        public Book GetBook(int bookId)
         {
-            var book = _bookRepository.GetAll(include => include.Author, include => include.Genres)
-                .Where(b => b.AuthorId == authorId);
-            return book.Select(_mapper.Map<BookWithAuthorAndGenreDto>);
+            return _bookRepository.Get(bookId);
         }
 
-        public IEnumerable<BookWithAuthorAndGenreDto> GetByAuthorQuery(string query)
+        public IEnumerable<Book> GetSortedBy(string sortBy)
         {
-            var books = _bookRepository.GetAll(include => include.Author, include => include.Genres).ToList()
-            .Where(book => $"{book.Author.FirstName}{book.Author.MiddleName}{book.Author.LastName}".ToUpper()
-            .Contains(query.ToUpper()));
-            return books.Select(_mapper.Map<BookWithAuthorAndGenreDto>);
-        }
-
-        public IEnumerable<BookWithAuthorAndGenreDto> GetByGenreQuery(string genreName)
-        {
-            var books = _bookRepository.GetAll(include => include.Author, include => include.Genres).ToList()
-            .Where(book => book.Genres.Any(genre => genre.GenreName == genreName));
-            return books.Select(_mapper.Map<BookWithAuthorAndGenreDto>);
-        }
-
-        public IEnumerable<BookWithAuthorAndGenreDto> GetBookByYear(DateTime yearOfWriting, bool alphabetSort)
-        {
-            var books = _bookRepository.GetAll(include => include.Author, include => include.Genres)
-                .Where(book => book.YearOfWriting == yearOfWriting);
-            var bookDto = books.Select(_mapper.Map<BookWithAuthorAndGenreDto>);
-            if (alphabetSort)
-                return bookDto;
-            else
-            {
-                return bookDto.Reverse();
-            }
-        }
-
-        public IEnumerable<BookWithAuthorAndGenreDto> GetSortedBy(string sortBy)
-        {
-            switch (sortBy.ToUpper())
+            switch (sortBy.ToString().ToUpper())
             {
                 case "AUTHOR":
-                    {
-                        var books = _bookRepository.GetAll(include => include.Author, include => include.Genres)
-                            .OrderBy(book => book.Author);
-                        return books.Select(_mapper.Map<BookWithAuthorAndGenreDto>);
-                    }
-
+                    return _bookRepository.GetAll().OrderBy(book => book.Author);
                 case "TITLE":
-                    {
-                        var books = _bookRepository.GetAll(include => include.Author, include => include.Genres)
-                            .OrderBy(book => book.Title);
-                        return books.Select(_mapper.Map<BookWithAuthorAndGenreDto>);
-                    }
+                    return _bookRepository.GetAll().OrderBy(book => book.Title);
                 case "GENRE":
-                    {
-                        var books = _bookRepository.GetAll(include => include.Author, include => include.Genres)
-                            .OrderBy(book => book.Genres);
-                        return books.Select(_mapper.Map<BookWithAuthorAndGenreDto>);
-                    }
+                    return _bookRepository.GetAll().OrderBy(book => book.BookGenre);
             }
-            var unsorted = _bookRepository.GetAll(include => include.Author, include => include.Genres);
-            return unsorted.Select(_mapper.Map<BookWithAuthorAndGenreDto>);
+            return null;
         }
 
-        public BookWithAuthorAndGenreDto AddGenreToBook(BookWithGenreDto bookDto, int bookId)
+        public Book AddBook(Book book)
         {
-            var book = _bookRepository.Get(bookId, include => include.Author, include => include.Genres);
-            foreach (var genreDto in bookDto.Genres)
-            {
-                var genre = _mapper.Map<Genre>(genreDto);
-                if (book.Genres.Contains(genre) == false)
-                    book.Genres.Add(genre);
-            }
-            _bookRepository.Update(book);
-            return _mapper.Map<BookWithAuthorAndGenreDto>(_bookRepository.Get(book.Id, include => include.Author, include => include.Genres));
-        }
-
-        public BookWithAuthorAndGenreDto DeleteGenreFromeBook(BookWithGenreDto bookDto, int bookId)
-        {
-            var book = _bookRepository.Get(bookId, include => include.Author, include => include.Genres);
-            foreach (var genreDto in bookDto.Genres)
-            {
-                var genre = _mapper.Map<Genre>(genreDto);
-                if (book.Genres.Contains(genre) == true)
-                    book.Genres.Remove(genre);
-            }
-            _bookRepository.Update(book);
-            return _mapper.Map<BookWithAuthorAndGenreDto>(_bookRepository.Get(book.Id, include => include.Author, include => include.Genres));
-        }
-
-        public BookWithAuthorAndGenreDto AddBook(BookDto bookDto)
-        {
-            var book = _mapper.Map<Book>(bookDto);
             _bookRepository.Insert(book);
-            var insertedAuthor = _bookRepository.GetAll(include => include.Author, include => include.Genres)
-                .FirstOrDefault(b => b.Id == book.Id);
-            return _mapper.Map<BookWithAuthorAndGenreDto>(insertedAuthor);
+            return _bookRepository.Get(book.Id);
         }
 
-        public void DeleteBook(int bookId)
+        public void DeleteBook(Book book)
         {
-            var book = _bookRepository.Get(bookId, include => include.Author, include => include.Genres);
-            if (book.Humans.Count == 0)
-                _bookRepository.Remove(book);
+            _bookRepository.Remove(book);
         }
 
-        public BookWithAuthorAndGenreDto UpdateBook(BookDto bookDto)
+        public Book UpdateBook(Book book)
         {
-            var book = _mapper.Map<Book>(bookDto);
             _bookRepository.Update(book);
-            var updatedBook = _bookRepository.Get(book.Id, include => include.Author, include => include.Genres);
-            return _mapper.Map<BookWithAuthorAndGenreDto>(updatedBook);
+            return _bookRepository.Get(book.Id);
         }
     }
 }

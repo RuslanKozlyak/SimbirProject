@@ -1,6 +1,3 @@
-using AutoMapper;
-using Domain.RepositoryInterfaces;
-using Domain.ServiceInterfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Repository;
 using Service;
-using Service.Mapping;
+using Service.Interfaces;
 using Simbir.Middleware;
 
 namespace Simbir
@@ -24,31 +21,24 @@ namespace Simbir
 
         public IConfiguration Configuration { get; }
 
-        /// <summary>
-        /// Часть 2 п 1 Подключить при помощи ef базу данных к проекту
-        /// </summary>
+        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            /// <summary>
+            /// Часть 2 п 1 Подключить при помощи ef базу данных к проекту
+            /// </summary>
             services.AddDbContext<DataContext>
                 (options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
-                b => b.MigrationsAssembly("Repository")));
+                b => b.MigrationsAssembly("Simbir")));
 
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
-            services.AddScoped<IBookService, BookService>();
-            services.AddScoped<IHumanService, HumanService>();
-            services.AddScoped<IGenreService, GenreService>();
-            services.AddScoped<IAuthorService, AuthorService>();
-
-            var mappingConfig = new MapperConfiguration(mc =>
-            {
-                mc.AddProfile(new AuthorMap());
-                mc.AddProfile(new BookMap());
-                mc.AddProfile(new GenreMap());
-                mc.AddProfile(new HumanMap());
-            });
-            IMapper mapper = mappingConfig.CreateMapper();
-            services.AddSingleton(mapper);
+            services.AddTransient<IBookService, BookService>();
+            services.AddTransient<IHumanService, HumanService>();
+            services.AddTransient<IGenreService, GenreService>();
+            services.AddTransient<IAuthorService, AuthorService>();
+            services.AddTransient<IBookGenreService, BookGenreService>();
+            services.AddTransient<ILibraryCardService, LibraryCardService>();
 
             services.AddControllers();
 
@@ -59,6 +49,7 @@ namespace Simbir
 
         }
 
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseMiddleware<LoggerMiddleware>();

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repository;
 
 namespace Simbir.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210918155857_DeletedProp")]
+    partial class DeletedProp
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -47,10 +49,8 @@ namespace Simbir.Migrations
                         .HasColumnType("datetimeoffset")
                         .HasColumnName("modified_date");
 
-                    b.Property<byte[]>("Version")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion")
+                    b.Property<int?>("Version")
+                        .HasColumnType("int")
                         .HasColumnName("version");
 
                     b.HasKey("Id");
@@ -81,10 +81,8 @@ namespace Simbir.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("name");
 
-                    b.Property<byte[]>("Version")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion")
+                    b.Property<int?>("Version")
+                        .HasColumnType("int")
                         .HasColumnName("version");
 
                     b.Property<DateTime?>("YearOfWriting")
@@ -120,10 +118,8 @@ namespace Simbir.Migrations
                         .HasColumnType("datetimeoffset")
                         .HasColumnName("modified_date");
 
-                    b.Property<byte[]>("Version")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion")
+                    b.Property<int?>("Version")
+                        .HasColumnType("int")
                         .HasColumnName("version");
 
                     b.HasKey("Id");
@@ -154,10 +150,8 @@ namespace Simbir.Migrations
                         .HasColumnType("datetimeoffset")
                         .HasColumnName("modified_date");
 
-                    b.Property<byte[]>("Version")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion")
+                    b.Property<int?>("Version")
+                        .HasColumnType("int")
                         .HasColumnName("version");
 
                     b.HasKey("Id");
@@ -197,10 +191,8 @@ namespace Simbir.Migrations
                         .HasColumnType("datetimeoffset")
                         .HasColumnName("modified_date");
 
-                    b.Property<byte[]>("Version")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion")
+                    b.Property<int?>("Version")
+                        .HasColumnType("int")
                         .HasColumnName("version");
 
                     b.HasKey("Id");
@@ -234,10 +226,8 @@ namespace Simbir.Migrations
                         .HasColumnType("datetimeoffset")
                         .HasColumnName("modified_date");
 
-                    b.Property<byte[]>("Version")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion")
+                    b.Property<int?>("Version")
+                        .HasColumnType("int")
                         .HasColumnName("version");
 
                     b.HasKey("Id");
