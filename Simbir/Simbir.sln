@@ -5,11 +5,13 @@ VisualStudioVersion = 16.0.31624.102
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simbir", "Simbir\Simbir.csproj", "{3ECBE290-C29F-4CA3-81C8-CF566C89582B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data", "Data\Data.csproj", "{E577BB68-47AE-483F-9604-AB31F2936DE5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Data\Domain.csproj", "{E577BB68-47AE-483F-9604-AB31F2936DE5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repository", "Repository\Repository.csproj", "{730CB92F-1AD0-4F43-9FDB-2312B93C125D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repository", "Repository\Repository.csproj", "{730CB92F-1AD0-4F43-9FDB-2312B93C125D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service", "Service\Service.csproj", "{4F6123FA-6D35-4D2D-8DFC-0FA47BE87BF9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service", "Service\Service.csproj", "{4F6123FA-6D35-4D2D-8DFC-0FA47BE87BF9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApiTests", "WebApiTests\WebApiTests.csproj", "{EE99F64C-2312-49AE-BB0A-AA4C20F5737A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{4F6123FA-6D35-4D2D-8DFC-0FA47BE87BF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4F6123FA-6D35-4D2D-8DFC-0FA47BE87BF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4F6123FA-6D35-4D2D-8DFC-0FA47BE87BF9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE99F64C-2312-49AE-BB0A-AA4C20F5737A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE99F64C-2312-49AE-BB0A-AA4C20F5737A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE99F64C-2312-49AE-BB0A-AA4C20F5737A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE99F64C-2312-49AE-BB0A-AA4C20F5737A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -19,11 +19,42 @@ namespace Simbir.Migrations
                 .HasAnnotation("ProductVersion", "5.0.9")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Data.DTO.Author", b =>
+            modelBuilder.Entity("BookGenre", b =>
+                {
+                    b.Property<int>("BooksId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GenresId")
+                        .HasColumnType("int");
+
+                    b.HasKey("BooksId", "GenresId");
+
+                    b.HasIndex("GenresId");
+
+                    b.ToTable("book_genre");
+                });
+
+            modelBuilder.Entity("BookHuman", b =>
+                {
+                    b.Property<int>("BooksId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("HumansId")
+                        .HasColumnType("int");
+
+                    b.HasKey("BooksId", "HumansId");
+
+                    b.HasIndex("HumansId");
+
+                    b.ToTable("library_card");
+                });
+
+            modelBuilder.Entity("Domain.Data.Author", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasColumnName("id");
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTimeOffset?>("AddedDate")
                         .HasColumnType("datetimeoffset")
@@ -58,11 +89,12 @@ namespace Simbir.Migrations
                     b.ToTable("author");
                 });
 
-            modelBuilder.Entity("Data.DTO.Book", b =>
+            modelBuilder.Entity("Domain.Data.Book", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasColumnName("id");
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTimeOffset?>("AddedDate")
                         .HasColumnType("datetimeoffset")
@@ -98,48 +130,12 @@ namespace Simbir.Migrations
                     b.ToTable("book");
                 });
 
-            modelBuilder.Entity("Data.DTO.BookGenre", b =>
+            modelBuilder.Entity("Domain.Data.Genre", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasColumnName("id");
-
-                    b.Property<DateTimeOffset?>("AddedDate")
-                        .HasColumnType("datetimeoffset")
-                        .HasColumnName("added_date");
-
-                    b.Property<int>("BookId")
-                        .HasColumnType("int")
-                        .HasColumnName("book_id");
-
-                    b.Property<int>("GenreId")
-                        .HasColumnType("int")
-                        .HasColumnName("genre_id");
-
-                    b.Property<DateTimeOffset?>("ModifiedDate")
-                        .HasColumnType("datetimeoffset")
-                        .HasColumnName("modified_date");
-
-                    b.Property<byte[]>("Version")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion")
-                        .HasColumnName("version");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BookId");
-
-                    b.HasIndex("GenreId");
-
-                    b.ToTable("book_genre");
-                });
-
-            modelBuilder.Entity("Data.DTO.Genre", b =>
-                {
-                    b.Property<int>("Id")
-                        .HasColumnType("int")
-                        .HasColumnName("id");
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTimeOffset?>("AddedDate")
                         .HasColumnType("datetimeoffset")
@@ -165,11 +161,12 @@ namespace Simbir.Migrations
                     b.ToTable("genre");
                 });
 
-            modelBuilder.Entity("Data.DTO.Human", b =>
+            modelBuilder.Entity("Domain.Data.Human", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasColumnName("id");
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTimeOffset?>("AddedDate")
                         .HasColumnType("datetimeoffset")
@@ -208,50 +205,39 @@ namespace Simbir.Migrations
                     b.ToTable("person");
                 });
 
-            modelBuilder.Entity("Data.DTO.LibraryCard", b =>
+            modelBuilder.Entity("BookGenre", b =>
                 {
-                    b.Property<int>("Id")
-                        .HasColumnType("int")
-                        .HasColumnName("id");
+                    b.HasOne("Domain.Data.Book", null)
+                        .WithMany()
+                        .HasForeignKey("BooksId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Property<DateTimeOffset?>("AddedDate")
-                        .HasColumnType("datetimeoffset")
-                        .HasColumnName("added_date");
-
-                    b.Property<int>("BookId")
-                        .HasColumnType("int")
-                        .HasColumnName("book_id");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("pickup_date");
-
-                    b.Property<int>("HumanId")
-                        .HasColumnType("int")
-                        .HasColumnName("person_id");
-
-                    b.Property<DateTimeOffset?>("ModifiedDate")
-                        .HasColumnType("datetimeoffset")
-                        .HasColumnName("modified_date");
-
-                    b.Property<byte[]>("Version")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion")
-                        .HasColumnName("version");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BookId");
-
-                    b.HasIndex("HumanId");
-
-                    b.ToTable("library_card");
+                    b.HasOne("Domain.Data.Genre", null)
+                        .WithMany()
+                        .HasForeignKey("GenresId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
-            modelBuilder.Entity("Data.DTO.Book", b =>
+            modelBuilder.Entity("BookHuman", b =>
                 {
-                    b.HasOne("Data.DTO.Author", "Author")
+                    b.HasOne("Domain.Data.Book", null)
+                        .WithMany()
+                        .HasForeignKey("BooksId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Data.Human", null)
+                        .WithMany()
+                        .HasForeignKey("HumansId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Data.Book", b =>
+                {
+                    b.HasOne("Domain.Data.Author", "Author")
                         .WithMany("Books")
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -260,64 +246,9 @@ namespace Simbir.Migrations
                     b.Navigation("Author");
                 });
 
-            modelBuilder.Entity("Data.DTO.BookGenre", b =>
-                {
-                    b.HasOne("Data.DTO.Book", "Book")
-                        .WithMany("BookGenre")
-                        .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Data.DTO.Genre", "Genre")
-                        .WithMany("BookGenre")
-                        .HasForeignKey("GenreId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Book");
-
-                    b.Navigation("Genre");
-                });
-
-            modelBuilder.Entity("Data.DTO.LibraryCard", b =>
-                {
-                    b.HasOne("Data.DTO.Book", "Book")
-                        .WithMany("LibraryCard")
-                        .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Data.DTO.Human", "Human")
-                        .WithMany("LibraryCard")
-                        .HasForeignKey("HumanId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Book");
-
-                    b.Navigation("Human");
-                });
-
-            modelBuilder.Entity("Data.DTO.Author", b =>
+            modelBuilder.Entity("Domain.Data.Author", b =>
                 {
                     b.Navigation("Books");
-                });
-
-            modelBuilder.Entity("Data.DTO.Book", b =>
-                {
-                    b.Navigation("BookGenre");
-
-                    b.Navigation("LibraryCard");
-                });
-
-            modelBuilder.Entity("Data.DTO.Genre", b =>
-                {
-                    b.Navigation("BookGenre");
-                });
-
-            modelBuilder.Entity("Data.DTO.Human", b =>
-                {
-                    b.Navigation("LibraryCard");
                 });
 #pragma warning restore 612, 618
         }
