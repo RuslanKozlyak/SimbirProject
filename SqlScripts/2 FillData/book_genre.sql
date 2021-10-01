@@ -1,0 +1,26 @@
+
+insert into book_genre (book_id, genre_id) values (1, 3);
+insert into book_genre (book_id, genre_id) values (2, 3);
+insert into book_genre (book_id, genre_id) values (2, 7);
+insert into book_genre (book_id, genre_id) values (3, 3);
+insert into book_genre (book_id, genre_id) values (4, 1);
+insert into book_genre (book_id, genre_id) values (5, 1);
+insert into book_genre (book_id, genre_id) values (6, 3);
+insert into book_genre (book_id, genre_id) values (6, 6);
+insert into book_genre (book_id, genre_id) values (7, 3);
+insert into book_genre (book_id, genre_id) values (8, 3);
+insert into book_genre (book_id, genre_id) values (8, 4);
+insert into book_genre (book_id, genre_id) values (8, 1);
+insert into book_genre (book_id, genre_id) values (9, 8);
+insert into book_genre (book_id, genre_id) values (9, 4);
+insert into book_genre (book_id, genre_id) values (10, 8);
+insert into book_genre (book_id, genre_id) values (10, 2);
+insert into book_genre (book_id, genre_id) values (11, 1);
+insert into book_genre (book_id, genre_id) values (11, 3);
+insert into book_genre (book_id, genre_id) values (11, 8);
+insert into book_genre (book_id, genre_id) values (12, 1);
+insert into book_genre (book_id, genre_id) values (12, 4);
+insert into book_genre (book_id, genre_id) values (13, 6);
+insert into book_genre (book_id, genre_id) values (14, 6);
+insert into book_genre (book_id, genre_id) values (15, 8);
+insert into book_genre (book_id, genre_id) values (15, 3);
