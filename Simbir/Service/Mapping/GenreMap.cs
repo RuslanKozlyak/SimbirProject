@@ -8,15 +8,26 @@ namespace Service.Mapping
     {
         public GenreMap()
         {
-            CreateMap<GenreDto, Genre>();
-            CreateMap<Genre, GenreDto>();
+            CreateMap<GenreDto, Genre>()
+                .ForMember(dst => dst.Id, src => src.Ignore())
+                .ForMember(dst => dst.GenreName, src => src.MapFrom(src => src.GenreName))
+                .ForMember(dst => dst.Books, src => src.MapFrom(src => src.Books))
+                .ReverseMap()
+                .ForMember(dst => dst.GenreName, src => src.MapFrom(src => src.GenreName))
+                .ForMember(dst => dst.Books, src => src.MapFrom(src => src.Books));
 
-            CreateMap<GenreWithoutBooksDto, Genre>();
-            CreateMap<Genre, GenreWithoutBooksDto>();
+            CreateMap<GenreWithoutBooksDto, Genre>().ForMember(dst => dst.Id, src => src.Ignore())
+                .ForMember(dst => dst.GenreName, src => src.MapFrom(src => src.GenreName))
+                .ForMember(dst => dst.Books, src => src.Ignore())
+                .ReverseMap()
+                .ForMember(dst => dst.GenreName, src => src.MapFrom(src => src.GenreName));
 
-            CreateMap<GenreStatisticsDto, Genre>();
-            CreateMap<Genre, GenreStatisticsDto>()
-                .ForMember("Count", opt => opt.MapFrom(genre => genre.Books.Count));
+            CreateMap<GenreStatisticsDto, Genre>()
+                .ForMember(dst => dst.Id, src => src.Ignore())
+                .ForMember(dst => dst.GenreName, src => src.MapFrom(src => src.GenreName))
+                .ForMember(dst => dst.Books, src => src.Ignore())
+                .ReverseMap()
+                .ForMember(dst => dst.Count, src => src.MapFrom(src => src.Books.Count));
         }
     }
 }

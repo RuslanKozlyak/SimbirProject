@@ -5,11 +5,9 @@ using System;
 
 namespace Simbir.Controllers
 {
-    /// <summary>
-    /// Часть 2. п.7.1 Переработать контроллера, отвечающего за человека
-    /// </summary>
+    [Route("v{version:apiVersion}/[controller]")]
     [ApiController]
-    [Route("[controller]")]
+    [ApiVersion("1.0")]
     public class HumansController : ControllerBase
     {
         private readonly IHumanService _humanService;
@@ -87,7 +85,7 @@ namespace Simbir.Controllers
         {
             try
             {
-                var result = _humanService.DelteBookFromHuman(humanDto, humanId);
+                var result = _humanService.DeleteBookFromHuman(humanDto, humanId);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -143,7 +141,7 @@ namespace Simbir.Controllers
 
         [Route("[action]")]
         [HttpDelete]
-        public IActionResult DeleteHumanByName([FromQuery] string fullName)
+        public IActionResult DeleteHumanByName([FromBody] HumanWithoutBooksDto fullName)
         {
             try
             {

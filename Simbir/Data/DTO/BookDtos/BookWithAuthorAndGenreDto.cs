@@ -1,6 +1,5 @@
 ﻿using Domain.DTO.AuthorDtos;
 using Domain.DTO.GenreDtos;
-using System;
 using System.Collections.Generic;
 
 namespace Domain.DTO.BookDtos
@@ -9,6 +8,7 @@ namespace Domain.DTO.BookDtos
     {
         public string Title { get; set; }
         public int? YearOfWriting { get; set; }
+        public int AuthorId { get; set; }
         public AuthorWithoutBooksDto Author { get; set; }
         public List<GenreWithoutBooksDto> Genres { get; set; }
     }

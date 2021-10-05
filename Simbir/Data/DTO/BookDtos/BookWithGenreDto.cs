@@ -1,5 +1,4 @@
 ﻿using Domain.DTO.GenreDtos;
-using System;
 using System.Collections.Generic;
 
 namespace Domain.DTO.BookDtos

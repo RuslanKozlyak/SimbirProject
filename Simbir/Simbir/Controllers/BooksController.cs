@@ -1,15 +1,14 @@
 ﻿using Domain.DTO.BookDtos;
+using Domain.DTO.GenreDtos;
 using Domain.ServiceInterfaces;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
 namespace Simbir.Controllers
 {
-    /// <summary>
-    /// Часть 2. п.7.2 Переработать контроллера, отвечающего за книгу
-    /// </summary>
-    [Route("[controller]")]
+    [Route("v{version:apiVersion}/[controller]")]
     [ApiController]
+    [ApiVersion("1.0")]
     public class BooksController : ControllerBase
     {
 
@@ -67,11 +66,11 @@ namespace Simbir.Controllers
 
         [Route("[action]/{bookId}")]
         [HttpPost]
-        public IActionResult AddGenreToBook([FromBody] BookWithGenreDto bookDto, int bookId)
+        public IActionResult AddGenreToBook([FromBody] GenreWithoutBooksDto genreDto, int bookId)
         {
             try
             {
-                var result = _bookService.AddGenreToBook(bookDto, bookId);
+                var result = _bookService.AddGenreToBook(genreDto, bookId);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -82,11 +81,11 @@ namespace Simbir.Controllers
 
         [Route("[action]/{bookId}")]
         [HttpDelete]
-        public IActionResult DeleteBookGenre([FromBody] BookWithGenreDto bookDto, int bookId)
+        public IActionResult DeleteBookGenre([FromBody] GenreWithoutBooksDto genreDto, int bookId)
         {
             try
             {
-                var result = _bookService.DeleteGenreFromeBook(bookDto, bookId);
+                var result = _bookService.DeleteGenreFromeBook(genreDto, bookId);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -140,9 +139,15 @@ namespace Simbir.Controllers
             }
         }
 
+        public enum SortBy
+        {
+            Author,
+            Title,
+            Genre
+        }
         [Route("[action]/SortBy")]
         [HttpGet]
-        public IActionResult GetSortedBy(string sortBy)
+        public IActionResult GetSortedBy(SortBy sortBy)
         {
             try
             {

@@ -5,11 +5,10 @@ using System;
 
 namespace Simbir.Controllers
 {
-    /// <summary>
-    /// Часть 2. п.7.3 Переработать контроллера, отвечающего за автора
-    /// </summary>
-    [Route("[controller]")]
+
+    [Route("v{version:apiVersion}/[controller]")]
     [ApiController]
+    [ApiVersion("1.0")]
     public class AuthorController : ControllerBase
     {
         private readonly IBookService _bookService;
@@ -54,11 +53,11 @@ namespace Simbir.Controllers
 
         [Route("[action]")]
         [HttpGet]
-        public IActionResult GetBookByYear([FromQuery] int yearOfWriting, [FromQuery] bool alphabetSort)
+        public IActionResult GetBookByYear([FromQuery] int yearOfWriting, [FromQuery] bool sortByAlphabet)
         {
             try
             {
-                var result = _bookService.GetBookByYear(yearOfWriting, alphabetSort);
+                var result = _bookService.GetBookByYear(yearOfWriting, sortByAlphabet);
                 return Ok(result);
 
             }

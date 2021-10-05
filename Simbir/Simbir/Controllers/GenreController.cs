@@ -6,11 +6,9 @@ using System;
 
 namespace Simbir.Controllers
 {
-    /// <summary>
-    /// Часть 2. п.7.4 Переработать контроллера, отвечающего за жанры
-    /// </summary>
-    [Route("api/[controller]")]
+    [Route("v{version:apiVersion}/[controller]")]
     [ApiController]
+    [ApiVersion("1.0")]
     public class GenreController : ControllerBase
     {
         private readonly IGenreService _genreService;

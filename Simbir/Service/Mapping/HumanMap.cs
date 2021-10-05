@@ -8,11 +8,28 @@ namespace Service.Mapping
     {
         public HumanMap()
         {
-            CreateMap<HumanDto, Human>();
-            CreateMap<Human, HumanDto>();
+            CreateMap<HumanDto, Human>()
+                .ForMember(dst => dst.Id, src => src.Ignore())
+                .ForMember(dst => dst.FirstName, src => src.MapFrom(src => src.FirstName))
+                .ForMember(dst => dst.LastName, src => src.MapFrom(src => src.LastName))
+                .ForMember(dst => dst.MiddleName, src => src.MapFrom(src => src.MiddleName))
+                .ForMember(dst => dst.Books, src => src.MapFrom(src => src.Books))
+                .ReverseMap()
+                .ForMember(dst => dst.FirstName, src => src.MapFrom(src => src.FirstName))
+                .ForMember(dst => dst.LastName, src => src.MapFrom(src => src.LastName))
+                .ForMember(dst => dst.MiddleName, src => src.MapFrom(src => src.MiddleName))
+                .ForMember(dst => dst.Books, src => src.MapFrom(src => src.Books));
 
-            CreateMap<HumanWithoutBooksDto, Human>();
-            CreateMap<Human, HumanWithoutBooksDto>();
+            CreateMap<HumanWithoutBooksDto, Human>()
+                .ForMember(dst => dst.Id, src => src.Ignore())
+                .ForMember(dst => dst.FirstName, src => src.MapFrom(src => src.FirstName))
+                .ForMember(dst => dst.LastName, src => src.MapFrom(src => src.LastName))
+                .ForMember(dst => dst.MiddleName, src => src.MapFrom(src => src.MiddleName))
+                .ForMember(dst => dst.Books, src => src.Ignore())
+                .ReverseMap()
+                .ForMember(dst => dst.FirstName, src => src.MapFrom(src => src.FirstName))
+                .ForMember(dst => dst.LastName, src => src.MapFrom(src => src.LastName))
+                .ForMember(dst => dst.MiddleName, src => src.MapFrom(src => src.MiddleName));
         }
     }
 }

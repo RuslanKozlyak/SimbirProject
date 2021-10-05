@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Repository.Configurations
 {
+    /// <summary>
+    ///Реализовать все связи между таблицами, которые присутствуют в схеме.
+    /// </summary>
     public class AuthorConfiguration : IEntityTypeConfiguration<Author>
     {
-        /// <summary>
-        ///Реализовать все связи между таблицами, которые присутствуют в схеме.
-        /// </summary>
         public void Configure(EntityTypeBuilder<Author> entityBuilder)
         {
             entityBuilder.ToTable("author");

@@ -1,6 +1,6 @@
 ﻿using Domain.Data;
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace Domain.RepositoryInterfaces
@@ -10,11 +10,10 @@ namespace Domain.RepositoryInterfaces
     /// </summary>
     public interface IRepository<T> where T : BaseEntity
     {
-        IEnumerable<T> GetAll(params Expression<Func<T, object>>[] includes);
+        IQueryable<T> GetAll(params Expression<Func<T, object>>[] includes);
         T Get(int id, params Expression<Func<T, object>>[] includes);
         void Insert(T entity);
         void Update(T entity);
         void Remove(T entity);
-        void SaveChanges();
     }
 }
