@@ -34,10 +34,11 @@ namespace Service
 
         public IEnumerable<HumanWithoutBooksDto> GetHumanByQuery(string query)
         {
+            query = query.ToUpper();
             var findedHumans = _humanRepository.GetAllHumans()
-               .Where(human => human.FirstName.Contains(query, StringComparison.CurrentCultureIgnoreCase)
-              | human.LastName.Contains(query, StringComparison.CurrentCultureIgnoreCase)
-              | human.MiddleName.Contains(query, StringComparison.CurrentCultureIgnoreCase));
+               .Where(human => human.FirstName.ToUpper().Equals(query)
+              | human.LastName.ToUpper().Equals(query)
+              | human.MiddleName.ToUpper().Equals(query));
 
             return _mapper.ProjectTo<HumanWithoutBooksDto>(findedHumans);
         }

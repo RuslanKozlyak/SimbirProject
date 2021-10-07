@@ -43,10 +43,11 @@ namespace Service
 
         public IEnumerable<BookWithAuthorAndGenreDto> GetByAuthorQuery(string query)
         {
+            query = query.ToUpper();
             var books = _bookRepository.GetAllBooks()
-            .Where(book => book.Author.FirstName.Contains(query, StringComparison.CurrentCultureIgnoreCase)
-              | book.Author.LastName.Contains(query, StringComparison.CurrentCultureIgnoreCase)
-              | book.Author.MiddleName.Contains(query, StringComparison.CurrentCultureIgnoreCase));
+            .Where(book => book.Author.FirstName.ToUpper().Contains(query)
+              | book.Author.LastName.ToUpper().Contains(query)
+              | book.Author.MiddleName.ToUpper().Contains(query));
 
             return _mapper.ProjectTo<BookWithAuthorAndGenreDto>(books);
         }

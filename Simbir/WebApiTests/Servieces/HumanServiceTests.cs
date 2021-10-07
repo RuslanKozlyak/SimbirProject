@@ -1,26 +1,30 @@
 ﻿using AutoMapper;
-using Domain.Data;
-using Domain.DTO.AuthorDtos;
-using Domain.DTO.BookDtos;
-using Domain.DTO.GenreDtos;
 using Domain.DTO.HumanDtos;
 using Domain.RepositoryInterfaces;
+using FluentAssertions;
 using Moq;
 using Service;
 using Service.Mapping;
-using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace WebApiTests.Servieces
 {
+    [Collection("DatabaseCollection")]
     public class HumanServiceTests
     {
-        private static IMapper _mapper;
+        private IMapper _mapper;
+        private Mock<IHumanRepository> mock;
+        private HumanService service;
+        private DatabaseFixture _database;
 
-        public HumanServiceTests()
+        public HumanServiceTests(DatabaseFixture fixture)
         {
             if (_mapper == null)
             {
+                _database = fixture;
+                var context = _database.CreateContext();
+
                 var mappingConfig = new MapperConfiguration(mc =>
                 {
                     mc.AddProfile(new AuthorMap());
@@ -30,110 +34,58 @@ namespace WebApiTests.Servieces
                 });
                 IMapper mapper = mappingConfig.CreateMapper();
                 _mapper = mapper;
+
+                mock = new Mock<IHumanRepository>();
+                service = new HumanService(mock.Object, _mapper);
+
+                mock.Setup(repo => repo.GetHuman(1))
+                                    .Returns(_database.humanEntity.First);
+
+                mock.Setup(repo => repo.GetAllHumans())
+                                    .Returns(_database.humanEntity);
             }
         }
 
         [Fact]
         public void GetHuman_WithExistHuman_ShouldReturn_HumanWithoutBooksDto()
         {
-            var mock = new Mock<IRepository<Human>>();
-            var service = new HumanService(mock.Object, _mapper);
-            var human = new Human
-            {
-                Id = 1,
-                FirstName = "Руслан",
-                LastName = "Козляк",
-                MiddleName = "Владимирович",
-                Birthday = "14.08.2001",
-                Books = new List<Book>()
-            };
-            mock.Setup(repo => repo.Get(1)).Returns(human);
-            var expected = new HumanWithoutBooksDto
-            {
-                FirstName = "Руслан",
-                LastName = "Козляк",
-                MiddleName = "Владимирович",
-                Birthday = "14.08.2001",
-            };
+            //Arrange 
+            var human = _database.humanEntity.First();
+            var expected = _mapper.Map<HumanWithoutBooksDto>(human);
 
+            //Act
             var actual = service.GetHuman(1);
 
-            Assert.Equal(expected.FirstName, actual.FirstName);
-            Assert.Equal(expected.LastName, actual.LastName);
-            Assert.Equal(expected.MiddleName, actual.MiddleName);
-            Assert.Equal(expected.Birthday, actual.Birthday);
+            //Assert
+            actual.Should().BeEquivalentTo(expected);
         }
 
         [Fact]
         public void GetAllHumans_WithExistHuman_ShouldReturn_HumanWithoutBooksDto()
         {
-            var mock = new Mock<IRepository<Human>>();
-            var service = new HumanService(mock.Object, _mapper);
-            var human = new Human
-            {
-                Id = 1,
-                FirstName = "Руслан",
-                LastName = "Козляк",
-                MiddleName = "Владимирович",
-                Birthday = "14.08.2001",
-                Books = new List<Book>()
-            };
-            var humans = new List<Human>();
-            humans.Add(human);
-            mock.Setup(repo => repo.GetAll()).Returns(humans);
-            var expected = new HumanWithoutBooksDto
-            {
-                FirstName = "Руслан",
-                LastName = "Козляк",
-                MiddleName = "Владимирович",
-                Birthday = "14.08.2001",
-            };
+            //Arrange 
+            var human = _database.humanEntity;
+            var expected = _mapper.ProjectTo<HumanWithoutBooksDto>(human);
 
-            var actualBooks = service.GetAllHumans();
-            var actual = new List<HumanWithoutBooksDto>();
-            foreach (var a in actualBooks)
-                actual.Add(a);
+            //Act
+            var actual = service.GetAllHumans();
 
-            Assert.Equal(expected.FirstName, actual[0].FirstName);
-            Assert.Equal(expected.LastName, actual[0].LastName);
-            Assert.Equal(expected.MiddleName, actual[0].MiddleName);
-            Assert.Equal(expected.Birthday, actual[0].Birthday);
+            //Assert
+            actual.Should().BeEquivalentTo(expected);
         }
 
         [Fact]
         public void GetHumanByQuery_WithExistHuman_ShouldReturn_HumanWithoutBooksDto()
         {
-            var mock = new Mock<IRepository<Human>>();
-            var service = new HumanService(mock.Object, _mapper);
-            var human = new Human
-            {
-                Id = 1,
-                FirstName = "Руслан",
-                LastName = "Козляк",
-                MiddleName = "Владимирович",
-                Birthday = "14.08.2001",
-                Books = new List<Book>()
-            };
-            var humans = new List<Human>();
-            humans.Add(human);
-            mock.Setup(repo => repo.GetAll()).Returns(humans);
-            var expected = new HumanWithoutBooksDto
-            {
-                FirstName = "Руслан",
-                LastName = "Козляк",
-                MiddleName = "Владимирович",
-                Birthday = "14.08.2001",
-            };
+            //Arrange 
+            var human = _database.humanEntity;
+            var expected = _mapper.ProjectTo<HumanWithoutBooksDto>(human);
 
-            var actualBooks = service.GetHumanByQuery("Руслан");
-            var actual = new List<HumanWithoutBooksDto>();
-            foreach (var a in actualBooks)
-                actual.Add(a);
+            //Act
+            var actual = service.GetHumanByQuery("Иван");
 
-            Assert.Equal(expected.FirstName, actual[0].FirstName);
-            Assert.Equal(expected.LastName, actual[0].LastName);
-            Assert.Equal(expected.MiddleName, actual[0].MiddleName);
-            Assert.Equal(expected.Birthday, actual[0].Birthday);
+            //Assert
+            actual.Should().BeEquivalentTo(expected);
         }
     }
 }

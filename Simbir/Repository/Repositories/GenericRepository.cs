@@ -53,7 +53,7 @@ namespace Repository.Repositories
         {
             if (entity == null)
             {
-                throw new Exception($"User with Id {entity.Id} not found");
+                throw new ArgumentNullException();
             }
 
             var now = DateTimeOffset.UtcNow;
@@ -67,16 +67,21 @@ namespace Repository.Repositories
         {
             if (entity == null)
             {
-                throw new Exception($"User with Id {entity.Id} not found");
+                throw new ArgumentNullException();
             }
 
             entity.ModifiedDate = DateTimeOffset.UtcNow;
+            _entities.Update(entity);
             _context.SaveChanges();
         }
 
         public void Remove(T entity)
         {
-            if (Get(entity.Id) != null)
+            if (entity == null)
+            {
+                throw new ArgumentNullException();
+            }
+            else if (Get(entity.Id) != null)
             {
                 _entities.Remove(entity);
                 _context.SaveChanges();

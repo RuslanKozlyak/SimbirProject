@@ -1,26 +1,30 @@
 ﻿using AutoMapper;
-using Domain.Data;
-using Domain.DTO.AuthorDtos;
-using Domain.DTO.BookDtos;
 using Domain.DTO.GenreDtos;
-using Domain.DTO.HumanDtos;
 using Domain.RepositoryInterfaces;
+using FluentAssertions;
 using Moq;
 using Service;
 using Service.Mapping;
-using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace WebApiTests.Servieces
 {
+    [Collection("DatabaseCollection")]
     public class GenreServiceTests
     {
-        private static IMapper _mapper;
+        private IMapper _mapper;
+        private Mock<IGenreRepository> mock;
+        private GenreService service;
+        private DatabaseFixture _database;
 
-        public GenreServiceTests()
+        public GenreServiceTests(DatabaseFixture fixture)
         {
             if (_mapper == null)
             {
+                _database = fixture;
+                var context = _database.CreateContext();
+
                 var mappingConfig = new MapperConfiguration(mc =>
                 {
                     mc.AddProfile(new AuthorMap());
@@ -30,91 +34,58 @@ namespace WebApiTests.Servieces
                 });
                 IMapper mapper = mappingConfig.CreateMapper();
                 _mapper = mapper;
+
+                mock = new Mock<IGenreRepository>();
+                service = new GenreService(mock.Object, _mapper);
+
+                mock.Setup(repo => repo.GetGenre(1))
+                                    .Returns(_database.genreEntity.First);
+
+                mock.Setup(repo => repo.GetAllGenres())
+                                    .Returns(_database.genreEntity);
             }
         }
 
         [Fact]
         public void GetGenre_WithExistGenre_ShouldReturn_GenreWithoutBooksDto()
         {
-            var mock = new Mock<IRepository<Genre>>();
-            var service = new GenreService(mock.Object, _mapper);
-            var genre = new Genre
-            {
-                Id = 1,
-                GenreName = "Роман",
-                Books = new List<Book>()
-            };
-            mock.Setup(repo => repo.Get(1)).Returns(genre);
-            var expected = new GenreWithoutBooksDto
-            {
-                GenreName = "Роман"
-            };
-           
+            //Arrange 
+            var genre = _database.genreEntity.First();
+            var expected = _mapper.Map<GenreWithoutBooksDto>(genre);
+
+            //Act
             var actual = service.GetGenre(1);
 
-            Assert.Equal(expected.GenreName, actual.GenreName);
+            //Assert
+            actual.Should().BeEquivalentTo(expected);
         }
 
         [Fact]
         public void GetAllGenres_WithExistGenre_ShouldReturn_GenreWithoutBooksDto()
         {
-            var mock = new Mock<IRepository<Genre>>();
-            var service = new GenreService(mock.Object, _mapper);
-            var genre = new Genre
-            {
-                Id = 1,
-                GenreName = "Роман",
-                Books = new List<Book>()
-            };
-            var genres = new List<Genre>();
-            genres.Add(genre);
-            mock.Setup(repo => repo.GetAll()).Returns(genres);
-            var expected = new GenreWithoutBooksDto
-            {
-                GenreName = "Роман"
-            };
+            //Arrange 
+            var genre = _database.genreEntity;
+            var expected = _mapper.ProjectTo<GenreWithoutBooksDto>(genre);
 
-            var actualGenress = service.GetAllGenres();
-            var actual = new List<GenreWithoutBooksDto>();
-            foreach (var a in actualGenress)
-                actual.Add(a);
+            //Act
+            var actual = service.GetAllGenres();
 
-            Assert.Equal(expected.GenreName, actual[0].GenreName);
+            //Assert
+            actual.Should().BeEquivalentTo(expected);
         }
 
         [Fact]
         public void GetGenreStatistics_WithExistGenre_ShouldReturn_GenreWithoutBooksDto()
         {
-            var mock = new Mock<IRepository<Genre>>();
-            var service = new GenreService(mock.Object, _mapper);
-            var genre = new Genre
-            {
-                Id = 1,
-                GenreName = "Роман",
-                Books = new List<Book>()
-            };
-            var book = new Book
-            {
-                Title = "Евгений Онегин",
-                YearOfWriting = 1830,
-            };
-            genre.Books.Add(book);
-            var genres = new List<Genre>();
-            genres.Add(genre);
-            mock.Setup(repo => repo.GetAll(include => include.Books)).Returns(genres);
-            var expected = new GenreStatisticsDto
-            {
-                GenreName = "Роман",
-                Count = 1
-            };
+            //Arrange 
+            var genre = _database.genreEntity;
+            var expected = _mapper.ProjectTo<GenreStatisticsDto>(genre);
 
-            var actualGenress = service.GetGenreStatistics();
-            var actual = new List<GenreStatisticsDto>();
-            foreach (var a in actualGenress)
-                actual.Add(a);
+            //Act
+            var actual = service.GetGenreStatistics();
 
-            Assert.Equal(expected.GenreName, actual[0].GenreName);
-            Assert.Equal(expected.Count, actual[0].Count);
+            //Assert
+            actual.Should().BeEquivalentTo(expected);
         }
     }
 }
