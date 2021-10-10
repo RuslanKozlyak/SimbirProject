@@ -14,8 +14,7 @@ namespace Simbir.Controllers
         private readonly IBookService _bookService;
         private readonly IAuthorService _authorService;
 
-        public AuthorController(IHumanService humanService,
-            IGenreService genreService, IBookService bookService, IAuthorService authorService)
+        public AuthorController(IBookService bookService, IAuthorService authorService)
         {
             _bookService = bookService;
             _authorService = authorService;
@@ -58,6 +57,22 @@ namespace Simbir.Controllers
             try
             {
                 var result = _bookService.GetBookByYear(yearOfWriting, sortByAlphabet);
+                return Ok(result);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Route("[action]")]
+        [HttpGet]
+        public IActionResult GetAuthorByQuery([FromQuery] string query)
+        {
+            try
+            {
+                var result = _authorService.GetAuthorByQuery(query);
                 return Ok(result);
 
             }

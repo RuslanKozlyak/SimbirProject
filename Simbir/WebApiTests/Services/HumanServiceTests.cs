@@ -8,49 +8,43 @@ using Service.Mapping;
 using System.Linq;
 using Xunit;
 
-namespace WebApiTests.Servieces
+namespace WebApiTests.Services
 {
     [Collection("DatabaseCollection")]
     public class HumanServiceTests
     {
-        private IMapper _mapper;
-        private Mock<IHumanRepository> mock;
-        private HumanService service;
-        private DatabaseFixture _database;
+        private readonly IMapper _mapper;
+        private readonly HumanService service;
+        private readonly DatabaseFixture _database;
 
         public HumanServiceTests(DatabaseFixture fixture)
         {
-            if (_mapper == null)
+            _database = fixture;
+            _database.CreateContext();
+
+            _mapper = new Mapper(new MapperConfiguration(mc =>
             {
-                _database = fixture;
-                var context = _database.CreateContext();
+                mc.AddProfile(new AuthorMap());
+                mc.AddProfile(new BookMap());
+                mc.AddProfile(new GenreMap());
+                mc.AddProfile(new HumanMap());
+            }));
 
-                var mappingConfig = new MapperConfiguration(mc =>
-                {
-                    mc.AddProfile(new AuthorMap());
-                    mc.AddProfile(new BookMap());
-                    mc.AddProfile(new GenreMap());
-                    mc.AddProfile(new HumanMap());
-                });
-                IMapper mapper = mappingConfig.CreateMapper();
-                _mapper = mapper;
+            var mock = new Mock<IHumanRepository>();
+            service = new HumanService(mock.Object, _mapper);
 
-                mock = new Mock<IHumanRepository>();
-                service = new HumanService(mock.Object, _mapper);
+            mock.Setup(repo => repo.GetHuman(It.IsAny<int>()))
+                                .Returns(_database.HumanEntity.First);
 
-                mock.Setup(repo => repo.GetHuman(1))
-                                    .Returns(_database.humanEntity.First);
-
-                mock.Setup(repo => repo.GetAllHumans())
-                                    .Returns(_database.humanEntity);
-            }
+            mock.Setup(repo => repo.GetAllHumans())
+                                .Returns(_database.HumanEntity);
         }
 
         [Fact]
         public void GetHuman_WithExistHuman_ShouldReturn_HumanWithoutBooksDto()
         {
             //Arrange 
-            var human = _database.humanEntity.First();
+            var human = _database.HumanEntity.First();
             var expected = _mapper.Map<HumanWithoutBooksDto>(human);
 
             //Act
@@ -64,7 +58,7 @@ namespace WebApiTests.Servieces
         public void GetAllHumans_WithExistHuman_ShouldReturn_HumanWithoutBooksDto()
         {
             //Arrange 
-            var human = _database.humanEntity;
+            var human = _database.HumanEntity;
             var expected = _mapper.ProjectTo<HumanWithoutBooksDto>(human);
 
             //Act
@@ -78,7 +72,7 @@ namespace WebApiTests.Servieces
         public void GetHumanByQuery_WithExistHuman_ShouldReturn_HumanWithoutBooksDto()
         {
             //Arrange 
-            var human = _database.humanEntity;
+            var human = _database.HumanEntity.Where(human => human.FirstName == "Иван");
             var expected = _mapper.ProjectTo<HumanWithoutBooksDto>(human);
 
             //Act

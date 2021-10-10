@@ -77,12 +77,14 @@ namespace Repository.Repositories
 
         public void Remove(T entity)
         {
+            var obj = _entities.Where(_entity => _entity.Id == entity.Id);
             if (entity == null)
             {
                 throw new ArgumentNullException();
             }
-            else if (Get(entity.Id) != null)
+            else if (obj != null)
             {
+                
                 _entities.Remove(entity);
                 _context.SaveChanges();
             }

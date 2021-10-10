@@ -5,21 +5,15 @@ using Repository;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
-using Xunit;
 
 namespace WebApiTests
 {
-    [CollectionDefinition("DatabaseCollection")]
-    public class DatabaseCollection : ICollectionFixture<DatabaseFixture>
-    {
-    }
-
     public class DatabaseFixture : IDisposable
     {
-        public DbSet<Author> authorEntity;
-        public DbSet<Book>bookEntity ;
-        public DbSet<Genre>genreEntity;
-        public DbSet<Human>humanEntity;
+        public DbSet<Author> AuthorEntity;
+        public DbSet<Book> BookEntity;
+        public DbSet<Genre> GenreEntity;
+        public DbSet<Human> HumanEntity;
         private DbConnection _connection;
 
         private DbContextOptions<DataContext> CreateOptions()
@@ -28,33 +22,27 @@ namespace WebApiTests
                 .UseSqlite(_connection).Options;
         }
 
-        public DatabaseFixture()
-        {
-
-        }
-
         public DataContext CreateContext()
         {
-            if (_connection == null)
-            {
-                _connection = new SqliteConnection("DataSource=:memory:");
+            Dispose();
 
-                _connection.Open();
+            _connection = new SqliteConnection("DataSource=:memory:");
 
-                var options = CreateOptions();
-                var context = new DataContext(options);
+            _connection.Open();
 
-                context.Database.EnsureCreated();
+            var options = CreateOptions();
+            var context = new DataContext(options);
 
-                authorEntity = context.Set<Author>();
-                bookEntity = context.Set<Book>();
-                genreEntity = context.Set<Genre>();
-                humanEntity = context.Set<Human>();
+            context.Database.EnsureCreated();
 
-                Seed(context);
-            }
+            AuthorEntity = context.Set<Author>();
+            BookEntity = context.Set<Book>();
+            GenreEntity = context.Set<Genre>();
+            HumanEntity = context.Set<Human>();
 
-            return new DataContext(CreateOptions());
+            Seed(context);
+
+            return context;
         }
 
         private void Seed(DataContext context)
@@ -143,22 +131,22 @@ namespace WebApiTests
             human1.Books.Add(book1);
             human2.Books.Add(book2);
 
-            authorEntity.AddRange(author1, author2);
-            bookEntity.AddRange(book1, book2);
-            genreEntity.AddRange(genre1, genre2);
-            humanEntity.AddRange(human1, human2);
+            AuthorEntity.AddRange(author1, author2);
+            BookEntity.AddRange(book1, book2);
+            GenreEntity.AddRange(genre1, genre2);
+            HumanEntity.AddRange(human1, human2);
 
             context.SaveChanges();
         }
 
         public void Dispose()
         {
-            if (_connection != null)
+            if (_connection == null)
             {
-                _connection.Dispose();
-                _connection = null;
+                return;
             }
+            _connection.Dispose();
+            _connection = null;
         }
     }
-
 }

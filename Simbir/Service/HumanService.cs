@@ -35,12 +35,12 @@ namespace Service
         public IEnumerable<HumanWithoutBooksDto> GetHumanByQuery(string query)
         {
             query = query.ToUpper();
-            var findedHumans = _humanRepository.GetAllHumans()
+            var findedHumans = _humanRepository.GetAllHumans().ToList()
                .Where(human => human.FirstName.ToUpper().Equals(query)
               | human.LastName.ToUpper().Equals(query)
               | human.MiddleName.ToUpper().Equals(query));
 
-            return _mapper.ProjectTo<HumanWithoutBooksDto>(findedHumans);
+            return _mapper.ProjectTo<HumanWithoutBooksDto>(findedHumans.AsQueryable());
         }
 
         public IEnumerable<BookWithAuthorAndGenreDto> GetHumanBooks(int humanId)

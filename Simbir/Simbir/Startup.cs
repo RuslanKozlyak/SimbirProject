@@ -1,5 +1,3 @@
-using Domain.RepositoryInterfaces;
-using Domain.ServiceInterfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -10,10 +8,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Repository;
-using Repository.Repositories;
 using Service;
 using Service.Mapping;
 using Simbir.Middleware;
+using System;
 
 namespace Simbir
 {
@@ -33,19 +31,19 @@ namespace Simbir
         {
             services.AddDbContext<DataContext>
                 (options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
-                b => b.MigrationsAssembly("Simbir")));
+                b => b.MigrationsAssembly("Repository")));
 
-            services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
+            services.AddGenericRepository();
 
-            services.AddScoped<IAuthorRepository, AuthorRepository>();
-            services.AddScoped<IBookRepository, BookRepository>();
-            services.AddScoped<IGenreRepository, GenreRepository>();
-            services.AddScoped<IHumanRepository, HumanRepository>();
+            services.AddAuthorRepository();
+            services.AddBookRepository();
+            services.AddGenreRepository();
+            services.AddHumanRepository();
 
-            services.AddScoped<IBookService, BookService>();
-            services.AddScoped<IHumanService, HumanService>();
-            services.AddScoped<IGenreService, GenreService>();
-            services.AddScoped<IAuthorService, AuthorService>();
+            services.AddAuthorService();
+            services.AddBookService();
+            services.AddGenreService();
+            services.AddHumanService();
 
             services.AddAutoMapper(typeof(AuthorMap).Assembly);
 
@@ -63,6 +61,11 @@ namespace Simbir
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Simbir", Version = "v1" });
             });
+        }
+
+        private void AddAuthorService(IServiceCollection services)
+        {
+            throw new NotImplementedException();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

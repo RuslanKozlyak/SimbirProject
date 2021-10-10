@@ -8,49 +8,43 @@ using Service.Mapping;
 using System.Linq;
 using Xunit;
 
-namespace WebApiTests.Servieces
+namespace WebApiTests.Services
 {
     [Collection("DatabaseCollection")]
     public class GenreServiceTests
     {
-        private IMapper _mapper;
-        private Mock<IGenreRepository> mock;
-        private GenreService service;
-        private DatabaseFixture _database;
+        private readonly IMapper _mapper;
+        private readonly GenreService service;
+        private readonly DatabaseFixture _database;
 
         public GenreServiceTests(DatabaseFixture fixture)
         {
-            if (_mapper == null)
+            _database = fixture;
+            _database.CreateContext();
+
+            _mapper = new Mapper(new MapperConfiguration(mc =>
             {
-                _database = fixture;
-                var context = _database.CreateContext();
+                mc.AddProfile(new AuthorMap());
+                mc.AddProfile(new BookMap());
+                mc.AddProfile(new GenreMap());
+                mc.AddProfile(new HumanMap());
+            }));
 
-                var mappingConfig = new MapperConfiguration(mc =>
-                {
-                    mc.AddProfile(new AuthorMap());
-                    mc.AddProfile(new BookMap());
-                    mc.AddProfile(new GenreMap());
-                    mc.AddProfile(new HumanMap());
-                });
-                IMapper mapper = mappingConfig.CreateMapper();
-                _mapper = mapper;
+            var mock = new Mock<IGenreRepository>();
+            service = new GenreService(mock.Object, _mapper);
 
-                mock = new Mock<IGenreRepository>();
-                service = new GenreService(mock.Object, _mapper);
+            mock.Setup(repo => repo.GetGenre(It.IsAny<int>()))
+                                .Returns(_database.GenreEntity.First);
 
-                mock.Setup(repo => repo.GetGenre(1))
-                                    .Returns(_database.genreEntity.First);
-
-                mock.Setup(repo => repo.GetAllGenres())
-                                    .Returns(_database.genreEntity);
-            }
+            mock.Setup(repo => repo.GetAllGenres())
+                                .Returns(_database.GenreEntity);
         }
 
         [Fact]
         public void GetGenre_WithExistGenre_ShouldReturn_GenreWithoutBooksDto()
         {
             //Arrange 
-            var genre = _database.genreEntity.First();
+            var genre = _database.GenreEntity.First();
             var expected = _mapper.Map<GenreWithoutBooksDto>(genre);
 
             //Act
@@ -64,7 +58,7 @@ namespace WebApiTests.Servieces
         public void GetAllGenres_WithExistGenre_ShouldReturn_GenreWithoutBooksDto()
         {
             //Arrange 
-            var genre = _database.genreEntity;
+            var genre = _database.GenreEntity;
             var expected = _mapper.ProjectTo<GenreWithoutBooksDto>(genre);
 
             //Act
@@ -78,7 +72,7 @@ namespace WebApiTests.Servieces
         public void GetGenreStatistics_WithExistGenre_ShouldReturn_GenreWithoutBooksDto()
         {
             //Arrange 
-            var genre = _database.genreEntity;
+            var genre = _database.GenreEntity;
             var expected = _mapper.ProjectTo<GenreStatisticsDto>(genre);
 
             //Act

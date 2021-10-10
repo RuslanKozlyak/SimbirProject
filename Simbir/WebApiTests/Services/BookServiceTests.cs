@@ -10,49 +10,43 @@ using Service.Mapping;
 using System.Linq;
 using Xunit;
 
-namespace WebApiTests.Servieces
+namespace WebApiTests.Services
 {
     [Collection("DatabaseCollection")]
     public class BookServiceTests
     {
-        private IMapper _mapper;
-        private Mock<IBookRepository> mock;
-        private BookService service;
-        private DatabaseFixture _database;
+        private readonly IMapper _mapper;
+        private readonly BookService service;
+        private readonly DatabaseFixture _database;
 
         public BookServiceTests(DatabaseFixture fixture)
         {
-            if (_mapper == null)
-            {
                 _database = fixture;
-                var context = _database.CreateContext();
+                _database.CreateContext();
 
-                var mappingConfig = new MapperConfiguration(mc =>
+                 _mapper = new Mapper(new MapperConfiguration(mc =>
                 {
                     mc.AddProfile(new AuthorMap());
                     mc.AddProfile(new BookMap());
                     mc.AddProfile(new GenreMap());
                     mc.AddProfile(new HumanMap());
-                });
-                IMapper mapper = mappingConfig.CreateMapper();
-                _mapper = mapper;
+                }));
 
-                mock = new Mock<IBookRepository>();
+                var mock = new Mock<IBookRepository>();
                 service = new BookService(mock.Object, _mapper);
 
-                mock.Setup(repo => repo.GetBook(1))
-                                    .Returns(_database.bookEntity.First);
+                mock.Setup(repo => repo.GetBook(It.IsAny<int>()))
+                                    .Returns(_database.BookEntity.First);
 
                 mock.Setup(repo => repo.GetAllBooks())
-                                    .Returns(_database.bookEntity);
-            }
+                                    .Returns(_database.BookEntity);
         }
 
         [Fact]
         public void GetBook_WithExistBook_ShouldReturn_BookWithAuthorAndGenreDto()
         {
             //Arrange 
-            var book = _database.bookEntity.First();
+            var book = _database.BookEntity.First();
             var expected = _mapper.Map<BookWithAuthorAndGenreDto>(book);
 
             //Act
@@ -66,7 +60,7 @@ namespace WebApiTests.Servieces
         public void GetAllBooks_WithExistbooks_ShouldReturn_BookWithAuthorAndGenreDto()
         {
             //Arrange 
-            var book = _database.bookEntity;
+            var book = _database.BookEntity;
             var expected = _mapper.ProjectTo<BookWithAuthorAndGenreDto>(book);
 
             //Act
@@ -80,7 +74,7 @@ namespace WebApiTests.Servieces
         public void GetAuthorBooks_WithExistbooks_ShouldReturn_BookWithAuthorAndGenreDto()
         {
             //Arrange 
-            var book = _database.authorEntity.First().Books;
+            var book = _database.AuthorEntity.First().Books;
             var expected = _mapper.ProjectTo<BookWithAuthorAndGenreDto>(book.AsQueryable());
 
             //Act
@@ -94,7 +88,7 @@ namespace WebApiTests.Servieces
         public void GetByAuthorQuery_WithExistbooks_ShouldReturn_BookWithAuthorAndGenreDto()
         {
             //Arrange 
-            var book = _database.authorEntity.Where(author => author.Id == 1).First().Books;
+            var book = _database.AuthorEntity.First().Books;
             var expected = _mapper.ProjectTo<BookWithAuthorAndGenreDto>(book.AsQueryable<Book>());
 
             //Act
@@ -108,7 +102,7 @@ namespace WebApiTests.Servieces
         public void GetByGenreQuery_WithExistbooks_ShouldReturn_BookWithAuthorAndGenreDto()
         {
             //Arrange 
-            var book = _database.authorEntity.Where(author => author.Id == 1).First().Books;
+            var book = _database.AuthorEntity.First().Books;
             var expected = _mapper.ProjectTo<BookWithAuthorAndGenreDto>(book.AsQueryable());
 
             //Act
@@ -122,7 +116,7 @@ namespace WebApiTests.Servieces
         public void GetBookByYear_WithExistbooks_ShouldReturn_BookWithAuthorAndGenreDto()
         {
             //Arrange 
-            var book = _database.bookEntity.Where(book => book.YearOfWriting == 1830);
+            var book = _database.BookEntity.Where(book => book.YearOfWriting == 1830);
             var expected = _mapper.ProjectTo<BookWithAuthorAndGenreDto>(book.AsQueryable());
 
             //Act

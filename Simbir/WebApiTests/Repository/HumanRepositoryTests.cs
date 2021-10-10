@@ -8,23 +8,23 @@ using Xunit;
 namespace WebApiTests.Repository
 {
     [Collection("DatabaseCollection")]
-    public class AuthorRepositoryTests
+    public class HumanRepositoryTests
     {
         private readonly DatabaseFixture _database;
-        private readonly AuthorRepository _repository;
+        private readonly HumanRepository _repository;
 
-        public AuthorRepositoryTests(DatabaseFixture fixture)
+        public HumanRepositoryTests(DatabaseFixture fixture)
         {
             _database = fixture;
             var context = _database.CreateContext();
-            _repository = new AuthorRepository(context);
+            _repository = new HumanRepository(context);
         }
 
         [Fact]
-        public void GetAuthor_WithExistAuthor_ShouldReturn_Author()
+        public void GetHuman_WithExistHuman_ShouldReturn_Human()
         {
             //Arrange
-            var expected = _database.AuthorEntity.First();
+            var expected = _database.HumanEntity.First();
 
             //Act
             var actual = _repository.Get(1);
@@ -34,10 +34,10 @@ namespace WebApiTests.Repository
         }
 
         [Fact]
-        public void GetAllAuthors_WithExistAuthor_ShouldReturn_ListAuthor()
+        public void GetAllHumans_WithExistHuman_ShouldReturn_ListHuman()
         {
             //Arrange
-            var expected = _database.AuthorEntity.ToList();
+            var expected = _database.HumanEntity.ToList();
 
             //Act
             var actual = _repository.GetAll();
@@ -47,10 +47,10 @@ namespace WebApiTests.Repository
         }
 
         [Fact]
-        public void InsertAuthor_WithExistAuthor_ShouldReturn_Author()
+        public void InsertHuman_WithExistHuman_ShouldReturn_Human()
         {
             //Arrange
-            var expected = new Author
+            var expected = new Human
             {
                 Id = 3,
                 FirstName = "Эренст",
@@ -59,42 +59,42 @@ namespace WebApiTests.Repository
 
             //Act
             _repository.Insert(expected);
-            var actual = _database.AuthorEntity.First(author => author.Id == 3);
+            var actual = _database.HumanEntity.First(Human => Human.Id == 3);
 
             //Assert
             actual.Should().BeEquivalentTo(expected);
         }
 
         [Fact]
-        public void DeleteAuthor_WithExistAuthor()
+        public void DeleteHuman_WithExistHuman()
         {
             //Arrange
-            var expected = _database.AuthorEntity.First();
+            var expected = _database.HumanEntity.First();
 
             //Act
             _repository.Remove(expected);
 
             //Assert
-            Assert.Single(_database.AuthorEntity.AsEnumerable());
+            Assert.Single(_database.HumanEntity.AsEnumerable());
         }
 
         [Fact]
-        public void UpdateAuthor_WithExistAuthor()
+        public void UpdateHuman_WithExistHuman_ShouldReturn_Human()
         {
             //Arrange
-            var expected = _database.AuthorEntity.First();
+            var expected = _database.HumanEntity.First();
             expected.FirstName = "Петр";
 
             //Act
             _repository.Update(expected);
-            var actual = _database.AuthorEntity.First();
+            var actual = _database.HumanEntity.First();
 
             //Assert
             actual.Should().BeEquivalentTo(expected);
         }
 
         [Fact]
-        public void GetAuthor_WithNoExistAuthor_ShouldReturn_Exception()
+        public void GetHuman_WithNoExistHuman_ShouldReturn_Exception()
         {
             //Arrange
 
@@ -107,23 +107,23 @@ namespace WebApiTests.Repository
         }
 
         [Fact]
-        public void GetAllAuthors_WithNoExistAuthor_ShouldReturn_Empty()
+        public void GetAllHumans_WithNoExistHuman_ShouldReturn_Empty()
         {
             //Arrange
-            foreach (var author in _database.AuthorEntity.AsEnumerable())
+            foreach (var human in _database.HumanEntity.AsEnumerable())
             {
-                _repository.Remove(author);
+                _repository.Remove(human);
             }
 
             //Act
-            var actual = _repository.GetAllAuthors();
+            var actual = _repository.GetAllHumans();
 
             //Assert
             actual.Should().BeEmpty();
         }
 
         [Fact]
-        public void InsertAuthor_WithNoExistAuthor_ShouldReturn_ArgumentNullException()
+        public void InsertHuman_WithNoExistHuman_ShouldReturn_ArgumentNullException()
         {
             //Arrange
 
@@ -135,7 +135,7 @@ namespace WebApiTests.Repository
         }
 
         [Fact]
-        public void DeleteAuthor_WithNoExistAuthor_ShouldReturn_ArgumentNullException()
+        public void DeleteHuman_WithNoExistHuman_ShouldReturn_ArgumentNullException()
         {
             //Arrange
 
@@ -147,7 +147,7 @@ namespace WebApiTests.Repository
         }
 
         [Fact]
-        public void UpdateAuthor_WithNoExistAuthor_ShouldReturn_ArgumentNullException()
+        public void UpdateHuman_WithNoExistHuman_ShouldReturn_ArgumentNullException()
         {
             //Arrange
 
