@@ -49,31 +49,29 @@ namespace Service
             return _mapper.ProjectTo<BookWithAuthorAndGenreDto>(books);
         }
 
-        public HumanWithBooksDto AddBookToHuman(HumanWithBooksDto humanDto, int humanId)
+        public HumanWithBooksDto AddBookToHuman(BookDto bookDto, int humanId)
         {
             var human = _humanRepository.GetHuman(humanId);
 
-            foreach (var bookDto in humanDto.Books)
-            {
-                var book = _mapper.Map<Book>(bookDto);
-                if (human.Books.Contains(book) == false)
-                    human.Books.Add(book);
-            }
+            var book = _mapper.Map<Book>(bookDto);
+            if (human.Books.Contains(book) == false)
+                human.Books.Add(book);
+            else
+                throw new Exception("Эта книга уже есть у пользователя!");
 
             _humanRepository.Update(human);
             return _mapper.Map<HumanWithBooksDto>(_humanRepository.GetHuman(human.Id));
         }
 
-        public HumanWithBooksDto DeleteBookFromHuman(HumanWithBooksDto humanDto, int humanId)
+        public HumanWithBooksDto DeleteBookFromHuman(BookDto bookDto, int humanId)
         {
             var human = _humanRepository.GetHuman(humanId);
 
-            foreach (var bookDto in humanDto.Books)
-            {
-                var book = _mapper.Map<Book>(bookDto);
-                if (human.Books.Contains(book) == true)
-                    human.Books.Remove(book);
-            }
+            var book = _mapper.Map<Book>(bookDto);
+            if (human.Books.Contains(book) == true)
+                human.Books.Remove(book);
+            else
+                throw new Exception("Этой книги нет у пользователя!");
 
             _humanRepository.Update(human);
             return _mapper.Map<HumanWithBooksDto>(_humanRepository.GetHuman(human.Id));

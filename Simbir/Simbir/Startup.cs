@@ -1,3 +1,4 @@
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +13,7 @@ using Service;
 using Service.Mapping;
 using Simbir.Middleware;
 using System;
+using System.IO;
 
 namespace Simbir
 {
@@ -29,6 +31,8 @@ namespace Simbir
         /// </summary>
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMvc().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>());
+
             services.AddDbContext<DataContext>
                 (options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
                 b => b.MigrationsAssembly("Repository")));
@@ -60,12 +64,11 @@ namespace Simbir
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Simbir", Version = "v1" });
-            });
-        }
 
-        private void AddAuthorService(IServiceCollection services)
-        {
-            throw new NotImplementedException();
+                var filePath = Path.Combine(System.AppContext.BaseDirectory, "Simbir.xml");
+                c.IncludeXmlComments(filePath);
+            });
+            
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
