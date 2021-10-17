@@ -18,6 +18,10 @@ namespace Simbir.Controllers
             _genreService = genreService;
         }
 
+        /// <summary>
+        /// Получить все жанры
+        /// </summary>
+        /// <returns></returns>
         [Route("[action]")]
         [HttpGet]
         public IActionResult GetAll()
@@ -32,7 +36,12 @@ namespace Simbir.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
+        
+        /// <summary>
+        /// Добавить жанр
+        /// </summary>
+        /// <param name="genreDto">Добавляемый жанр</param>
+        /// <returns></returns>
         [Route("[action]")]
         [HttpPost]
         public IActionResult AddGenre([FromBody] GenreWithoutBooksDto genreDto)
@@ -48,6 +57,10 @@ namespace Simbir.Controllers
             }
         }
 
+        /// <summary>
+        /// Получить статистику по количеству книг относящихся к каждому жанру
+        /// </summary>
+        /// <returns></returns>
         [Route("[action]")]
         [HttpGet]
         public IActionResult GetGenreStatistic()

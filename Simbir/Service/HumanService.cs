@@ -34,12 +34,13 @@ namespace Service
 
         public IEnumerable<HumanWithoutBooksDto> GetHumanByQuery(string query)
         {
-            var findedHumans = _humanRepository.GetAllHumans()
-               .Where(human => human.FirstName.Contains(query, StringComparison.CurrentCultureIgnoreCase)
-              | human.LastName.Contains(query, StringComparison.CurrentCultureIgnoreCase)
-              | human.MiddleName.Contains(query, StringComparison.CurrentCultureIgnoreCase));
+            query = query.ToUpper();
+            var findedHumans = _humanRepository.GetAllHumans().ToList()
+               .Where(human => human.FirstName.ToUpper().Equals(query)
+              | human.LastName.ToUpper().Equals(query)
+              | human.MiddleName.ToUpper().Equals(query));
 
-            return _mapper.ProjectTo<HumanWithoutBooksDto>(findedHumans);
+            return _mapper.ProjectTo<HumanWithoutBooksDto>(findedHumans.AsQueryable());
         }
 
         public IEnumerable<BookWithAuthorAndGenreDto> GetHumanBooks(int humanId)
@@ -48,31 +49,29 @@ namespace Service
             return _mapper.ProjectTo<BookWithAuthorAndGenreDto>(books);
         }
 
-        public HumanWithBooksDto AddBookToHuman(HumanWithBooksDto humanDto, int humanId)
+        public HumanWithBooksDto AddBookToHuman(BookDto bookDto, int humanId)
         {
             var human = _humanRepository.GetHuman(humanId);
 
-            foreach (var bookDto in humanDto.Books)
-            {
-                var book = _mapper.Map<Book>(bookDto);
-                if (human.Books.Contains(book) == false)
-                    human.Books.Add(book);
-            }
+            var book = _mapper.Map<Book>(bookDto);
+            if (human.Books.Contains(book) == false)
+                human.Books.Add(book);
+            else
+                throw new Exception("Эта книга уже есть у пользователя!");
 
             _humanRepository.Update(human);
             return _mapper.Map<HumanWithBooksDto>(_humanRepository.GetHuman(human.Id));
         }
 
-        public HumanWithBooksDto DeleteBookFromHuman(HumanWithBooksDto humanDto, int humanId)
+        public HumanWithBooksDto DeleteBookFromHuman(BookDto bookDto, int humanId)
         {
             var human = _humanRepository.GetHuman(humanId);
 
-            foreach (var bookDto in humanDto.Books)
-            {
-                var book = _mapper.Map<Book>(bookDto);
-                if (human.Books.Contains(book) == true)
-                    human.Books.Remove(book);
-            }
+            var book = _mapper.Map<Book>(bookDto);
+            if (human.Books.Contains(book) == true)
+                human.Books.Remove(book);
+            else
+                throw new Exception("Этой книги нет у пользователя!");
 
             _humanRepository.Update(human);
             return _mapper.Map<HumanWithBooksDto>(_humanRepository.GetHuman(human.Id));

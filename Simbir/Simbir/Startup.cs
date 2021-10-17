@@ -1,5 +1,4 @@
-using Domain.RepositoryInterfaces;
-using Domain.ServiceInterfaces;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -10,10 +9,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Repository;
-using Repository.Repositories;
 using Service;
 using Service.Mapping;
 using Simbir.Middleware;
+using System;
+using System.IO;
 
 namespace Simbir
 {
@@ -31,21 +31,23 @@ namespace Simbir
         /// </summary>
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMvc().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>());
+
             services.AddDbContext<DataContext>
                 (options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
-                b => b.MigrationsAssembly("Simbir")));
+                b => b.MigrationsAssembly("Repository")));
 
-            services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
+            services.AddGenericRepository();
 
-            services.AddScoped<IAuthorRepository, AuthorRepository>();
-            services.AddScoped<IBookRepository, BookRepository>();
-            services.AddScoped<IGenreRepository, GenreRepository>();
-            services.AddScoped<IHumanRepository, HumanRepository>();
+            services.AddAuthorRepository();
+            services.AddBookRepository();
+            services.AddGenreRepository();
+            services.AddHumanRepository();
 
-            services.AddScoped<IBookService, BookService>();
-            services.AddScoped<IHumanService, HumanService>();
-            services.AddScoped<IGenreService, GenreService>();
-            services.AddScoped<IAuthorService, AuthorService>();
+            services.AddAuthorService();
+            services.AddBookService();
+            services.AddGenreService();
+            services.AddHumanService();
 
             services.AddAutoMapper(typeof(AuthorMap).Assembly);
 
@@ -62,7 +64,11 @@ namespace Simbir
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Simbir", Version = "v1" });
+
+                var filePath = Path.Combine(System.AppContext.BaseDirectory, "Simbir.xml");
+                c.IncludeXmlComments(filePath);
             });
+            
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

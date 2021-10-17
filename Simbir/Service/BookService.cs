@@ -43,18 +43,19 @@ namespace Service
 
         public IEnumerable<BookWithAuthorAndGenreDto> GetByAuthorQuery(string query)
         {
-            var books = _bookRepository.GetAllBooks()
-            .Where(book => book.Author.FirstName.Contains(query, StringComparison.CurrentCultureIgnoreCase)
-              | book.Author.LastName.Contains(query, StringComparison.CurrentCultureIgnoreCase)
-              | book.Author.MiddleName.Contains(query, StringComparison.CurrentCultureIgnoreCase));
+            query = query.ToUpper();
+            var books = _bookRepository.GetAllBooks().ToList()
+            .Where(book => book.Author.FirstName.ToUpper().Contains(query)
+              | book.Author.LastName.ToUpper().Contains(query)
+              | book.Author.MiddleName.ToUpper().Contains(query));
 
-            return _mapper.ProjectTo<BookWithAuthorAndGenreDto>(books);
+            return _mapper.ProjectTo<BookWithAuthorAndGenreDto>(books.AsQueryable());
         }
 
         public IEnumerable<BookWithAuthorAndGenreDto> GetByGenreQuery(string genreName)
         {
             var books = _bookRepository.GetAllBooks()
-            .Where(book => book.Genres.Any(genre => genre.GenreName == genreName));
+            .Where(book => book.Genres.Any(genre => genre.GenreName.Contains(genreName)));
 
             return _mapper.ProjectTo<BookWithAuthorAndGenreDto>(books);
         }

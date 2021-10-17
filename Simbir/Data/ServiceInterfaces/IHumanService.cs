@@ -26,13 +26,13 @@ namespace Domain.ServiceInterfaces
         /// Часть 2 п 7.1.6 Пользователь может взять книгу
         /// (добавить в список книг пользователя книгу)  Пользователь + книги
         /// </summary>
-        public HumanWithBooksDto AddBookToHuman(HumanWithBooksDto humanDto, int humanId);
+        public HumanWithBooksDto AddBookToHuman(BookDto bookDto, int humanId);
 
         /// <summary>
         /// Часть 2 п 7.1.7 Пользователь может вернуть книгу
         /// (добавить в список книг пользователя книгу)  Пользователь + книги
         /// </summary>
-        public HumanWithBooksDto DeleteBookFromHuman(HumanWithBooksDto humanDto, int humanId);
+        public HumanWithBooksDto DeleteBookFromHuman(BookDto bookDto, int humanId);
 
         /// <summary>
         /// Часть 2 п 7.1.1 Пользователь может быть добавлен. (POST) (вернуть пользователя)

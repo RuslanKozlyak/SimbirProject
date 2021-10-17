@@ -1,4 +1,5 @@
-﻿using Domain.DTO.HumanDtos;
+﻿using Domain.DTO.BookDtos;
+using Domain.DTO.HumanDtos;
 using Domain.ServiceInterfaces;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -19,6 +20,10 @@ namespace Simbir.Controllers
             _authorService = authorService;
         }
 
+        /// <summary>
+        /// Получить всех пользователей
+        /// </summary>
+        /// <returns></returns>
         [Route("[action]")]
         [HttpGet]
         public IActionResult GetAll()
@@ -34,6 +39,10 @@ namespace Simbir.Controllers
             }
         }
 
+        /// <summary>
+        /// Получить всех авторов
+        /// </summary>
+        /// <returns></returns>
         [Route("[action]")]
         [HttpGet]
         public IActionResult GetAuthors()
@@ -49,6 +58,11 @@ namespace Simbir.Controllers
             }
         }
 
+        /// <summary>
+        /// Получить книги, которые взял польователь
+        /// </summary>
+        /// <param name="humanId">Id пользователя для поиска</param>
+        /// <returns></returns>
         [Route("[action]/{humanId}")]
         [HttpGet]
         public IActionResult GetHumanBooks(int humanId)
@@ -64,13 +78,19 @@ namespace Simbir.Controllers
             }
         }
 
+        /// <summary>
+        /// Добавить книгу пользователю
+        /// </summary>
+        /// <param name="bookDto">Добавляемая книга</param>
+        /// <param name="humanId">Id человека, которому добавляется книга</param>
+        /// <returns></returns>
         [Route("[action]/{humanId}")]
         [HttpPost]
-        public IActionResult AddBookToPerson([FromBody] HumanWithBooksDto humanDto, int humanId)
+        public IActionResult AddBookToPerson([FromBody] BookDto bookDto, int humanId)
         {
             try
             {
-                var result = _humanService.AddBookToHuman(humanDto, humanId);
+                var result = _humanService.AddBookToHuman(bookDto, humanId);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -79,13 +99,19 @@ namespace Simbir.Controllers
             }
         }
 
+        /// <summary>
+        /// Удаление книги у пользователя
+        /// </summary>
+        /// <param name="bookDto">Удаляемая книга</param>
+        /// <param name="humanId">Id пользователя, у которого удалется книга</param>
+        /// <returns></returns>
         [Route("[action]/{humanId}")]
         [HttpDelete]
-        public IActionResult DeleteBookFromPerson([FromBody] HumanWithBooksDto humanDto, int humanId)
+        public IActionResult DeleteBookFromPerson([FromBody] BookDto bookDto, int humanId)
         {
             try
             {
-                var result = _humanService.DeleteBookFromHuman(humanDto, humanId);
+                var result = _humanService.DeleteBookFromHuman(bookDto, humanId);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -94,6 +120,11 @@ namespace Simbir.Controllers
             }
         }
 
+        /// <summary>
+        /// Добавление пользователь
+        /// </summary>
+        /// <param name="humanDto">Добавляемый пользователь</param>
+        /// <returns></returns>
         [Route("[action]")]
         [HttpPost]
         public IActionResult AddHuman([FromBody] HumanDto humanDto)
@@ -109,6 +140,11 @@ namespace Simbir.Controllers
             }
         }
 
+        /// <summary>
+        /// Обновление пользователя
+        /// </summary>
+        /// <param name="humanDto">Обновляемый пользователь</param>
+        /// <returns></returns>
         [Route("[action]")]
         [HttpPut]
         public IActionResult UpdateHuman([FromBody] HumanDto humanDto)
@@ -124,6 +160,11 @@ namespace Simbir.Controllers
             }
         }
 
+        /// <summary>
+        /// Удаление пользователя
+        /// </summary>
+        /// <param name="humanId">Удаляемый пользователь</param>
+        /// <returns></returns>
         [Route("[action]/{humanId}")]
         [HttpDelete]
         public IActionResult DeleteHuman(int humanId)
@@ -139,6 +180,11 @@ namespace Simbir.Controllers
             }
         }
 
+        /// <summary>
+        /// Удаление пользователя по ФИО
+        /// </summary>
+        /// <param name="fullName">ФИО пользователя, которого нужно удалить</param>
+        /// <returns></returns>
         [Route("[action]")]
         [HttpDelete]
         public IActionResult DeleteHumanByName([FromBody] HumanWithoutBooksDto fullName)

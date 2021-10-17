@@ -3,6 +3,7 @@ using Domain.Data;
 using Domain.DTO.AuthorDtos;
 using Domain.RepositoryInterfaces;
 using Domain.ServiceInterfaces;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,12 +36,13 @@ namespace Service
 
         public IEnumerable<AuthorWithoutBooksDto> GetAuthorByQuery(string query)
         {
-            var findedAuthors = _authorRepository.GetAllAuthors()
-              .Where(author => author.FirstName.Contains(query, StringComparison.CurrentCultureIgnoreCase)
-              | author.LastName.Contains(query, StringComparison.CurrentCultureIgnoreCase)
-              | author.MiddleName.Contains(query, StringComparison.CurrentCultureIgnoreCase));
+            query = query.ToUpper();
+            var findedAuthors = _authorRepository.GetAllAuthors().ToList()
+              .Where(author => author.FirstName.ToUpper().Contains(query)
+              | author.LastName.ToUpper().Contains(query)
+              | author.MiddleName.ToUpper().Contains(query));
 
-            return _mapper.ProjectTo<AuthorWithoutBooksDto>(findedAuthors);
+            return _mapper.ProjectTo<AuthorWithoutBooksDto>(findedAuthors.AsQueryable());
         }
 
         public AuthorWithBooksDto AddAuthor(AuthorDto authorDto)
